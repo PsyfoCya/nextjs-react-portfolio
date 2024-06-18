@@ -38,8 +38,8 @@ const Contact = () => {
       );
   };
 
-  console.log("budgets", budgets);
-  console.log("services", services);
+  // console.log("budgets", budgets);
+  // console.log("services", services);
   return (
     <div className="pt-24 px-3 lg:px-8">
       <Heading number="03" title_1="Contact" title_2="Me" />

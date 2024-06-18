@@ -69,13 +69,12 @@ const About = () => {
             <section id="stack">
               <div>
                 {/* <Card title="Stack"> Stack </Card> */}
-
                 <StackCard />
               </div>
             </section>
           </div>
 
-          <section id="gallery">
+          <section id="gallery" >
             <div className="hidden 2xl:flex">
               <Gallery />
             </div>

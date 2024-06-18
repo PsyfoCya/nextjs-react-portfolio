@@ -62,6 +62,15 @@ const Header = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [showToggle, setShowToggle] = useState<boolean>(false);
 
+  const scrollToContact = () => {
+    console.log("Button clicked");
+    const contactSection = document.getElementById("contact");
+    console.log("Contact section:", contactSection);
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY >= 80) {
@@ -84,7 +93,7 @@ const Header = () => {
       <Profile />
       <div className="hidden md:inline">
         <MagneticWrapper>
-          <FancyButton text="Contact Me" icon={<FaArrowRight />} />
+          <FancyButton text="Contact Me" icon={<FaArrowRight />} onClick={scrollToContact}/>
         </MagneticWrapper>
       </div>
 
