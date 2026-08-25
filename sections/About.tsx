@@ -11,75 +11,58 @@ import Gallery from "@/components/ui/Gallery";
 
 const About = () => {
   return (
-    <div className="pt-24 px-3 lg:px-8 ">
+    <div className="pt-16 sm:pt-24 px-3 lg:px-8">
       {/* Heading */}
-      <Heading number="02" title_1="About" title_2="Me" />
-      <div className="space-y-4 py-8">
-        <div className="spcace-y-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0 2xl:grid-cols-3">
-          {/* Me Card */}
-          <section id="about">
-            <Card title="Me">
-              <MeCard />
-            </Card>
+      <Heading
+        number="03"
+        title_1="About"
+        title_2="Me"
+        svgText="EXPERIENCE, EDUCATION AND THE STACK I WORK IN"
+      />
+
+      {/*
+        One grid rather than two, so the Gallery renders once instead of being
+        duplicated for mobile and desktop — duplicate ids broke the menu's
+        anchor links.
+      */}
+      <div className="grid grid-cols-1 gap-4 py-8 md:grid-cols-2 2xl:grid-cols-3">
+        <section id="me">
+          <Card title="Me">
+            <MeCard />
+          </Card>
+        </section>
+
+        <section id="resume">
+          <Card title="Resume">
+            <ResumeCard />
+          </Card>
+        </section>
+
+        <section id="background">
+          <Card title="My Background">
+            <BackgroundCard />
+          </Card>
+        </section>
+
+        <section id="certifications">
+          <CertificationCard />
+        </section>
+
+        <div className="space-y-4">
+          <section id="experience">
+            <ExperienceCard />
           </section>
-
-          {/* Resume Card */}
-          <section id="resume">
-            <Card title="Resume">
-              <ResumeCard />
-            </Card>
+          <section id="education">
+            <EducationCard />
           </section>
-
-          {/* Background Card */}
-          <section id="background">
-            <Card title="Backgorund">
-              <BackgroundCard />
-            </Card>
-          </section>
-
-          {/* Gallery Swiper Card */}
-          <section id="gallery">
-            <div className="2xl:hidden">
-              <Gallery />
-            </div>
-          </section>
-        </div>
-
-        <div className="spcace-y-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0 2xl:grid-cols-3">
-          <section id="certifications">
-            <div className="space-y-4">
-              {/* <Card title="Software Developer"> Developer </Card> */}
-              <CertificationCard />
-            </div>
-          </section>
-
-          <div className="space-y-4">
-            <section id="experience">
-              <div>
-                {/* <Card title="Stack"> Stack </Card> */}
-                <ExperienceCard />
-              </div>
-            </section>
-            <section id="education">
-              <div>
-                {/* <Card title="Stack"> Stack </Card> */}
-                <EducationCard />
-              </div>
-            </section>
-            <section id="stack">
-              <div>
-                {/* <Card title="Stack"> Stack </Card> */}
-                <StackCard />
-              </div>
-            </section>
-          </div>
-
-          <section id="gallery" >
-            <div className="hidden 2xl:flex">
-              <Gallery />
-            </div>
+          <section id="stack">
+            <StackCard />
           </section>
         </div>
+
+        <section id="gallery">
+          <Gallery />
+        </section>
       </div>
     </div>
   );

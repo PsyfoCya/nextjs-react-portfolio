@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FC, ReactNode } from "react";
 import Button from "../ui/Button";
 
@@ -6,10 +7,21 @@ interface ContactCardProps {
   icon: ReactNode;
   text: string;
   btnText: string;
+  /** Where the button goes — a mailto: or an external profile. */
+  href: string;
 }
-const ContactCard: FC<ContactCardProps> = ({ title, icon, text, btnText }) => {
+
+const ContactCard: FC<ContactCardProps> = ({
+  title,
+  icon,
+  text,
+  btnText,
+  href,
+}) => {
+  const isExternal = href.startsWith("http");
+
   return (
-    <div className="bg-secondary-background border border-border rounded-lg relative overflow-hidden py-5 pl-[25px] shadow-md">
+    <div className="bg-secondary-background border border-border rounded-lg relative overflow-hidden py-5 px-[25px] shadow-md">
       <div className="z-20 flex flex-col gap-8 justify-between items-start">
         {/* Header */}
         <div className="flex items-center gap-x-2">
@@ -19,9 +31,16 @@ const ContactCard: FC<ContactCardProps> = ({ title, icon, text, btnText }) => {
           <h1>{title}</h1>
         </div>
         <div>
-          <h2 className="font-bold text-2xl">{text}</h2>
+          <h2 className="font-bold text-xl sm:text-2xl break-words">{text}</h2>
         </div>
-        <Button className="w-24">{btnText}</Button>
+        <Link
+          href={href}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
+          className="link"
+        >
+          <Button className="w-24">{btnText}</Button>
+        </Link>
       </div>
     </div>
   );

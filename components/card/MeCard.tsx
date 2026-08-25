@@ -16,7 +16,7 @@ const MeCard = () => {
           className="absolute top-0 left-0 bottom-0 right-0 h-full w-full object-cover"
         />
         {/* tags */}
-        <div className="absolute top-[65%] space-y-2 ">
+        <div className="absolute top-[62%] space-y-2 ">
           <Tag
             text="Hello, World! 👋"
             className="rounded-tl-2xl rounded-br-2xl rounded-bl-2xl"
@@ -26,13 +26,16 @@ const MeCard = () => {
             className="rounded-tr-2xl rounded-br-2xl rounded-bl-2xl"
           />
           <Tag
-            text="Software Developer"
-            className="rounded-tl-2xl  rounded-br-2xl rounded-bl-2xl"
+            text="Frontend Developer"
+            className="rounded-tl-2xl rounded-br-2xl rounded-bl-2xl"
+          />
+          <Tag
+            text="React · TypeScript · Next.js"
+            className="rounded-tr-2xl rounded-br-2xl rounded-bl-2xl"
           />
         </div>
       </div>
       <div className="h-[2.4rem]"></div>
-    
     </Card>
   );
 };

@@ -1,9 +1,20 @@
-
+import { Dispatch, SetStateAction } from "react";
 import { cn } from "@/lib/utils";
 
-const ToggleButton = ({ open, setOpen }: { open: boolean, setOpen: any }) => {
+interface ToggleButtonProps {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const ToggleButton = ({ open, setOpen }: ToggleButtonProps) => {
   return (
-    <button onClick={() => setOpen((prev: any) => !prev)} className="fixed right-4 top-4 m-5 z-50 w-20 h-20 rounded-full bg-[#323E56] cursor-pointer">
+    <button
+      type="button"
+      aria-label={open ? "Close menu" : "Open menu"}
+      aria-expanded={open}
+      onClick={() => setOpen((prev) => !prev)}
+      className="fixed right-2 top-2 sm:right-4 sm:top-4 m-3 sm:m-5 z-50 w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-[#323E56] cursor-pointer"
+    >
       <div className="relative flex items-center justify-center h-full">
         <div className="flex flex-col gap-y-2 transform transition-all duration-300 origin-center overflow-hidden">
           <div

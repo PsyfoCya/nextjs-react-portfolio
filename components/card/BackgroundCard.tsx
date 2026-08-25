@@ -1,43 +1,46 @@
 import Card from "../ui/Card";
-import About from "../../sections/About";
 
 const BackgroundCard = () => {
   return (
-    <Card className="md:h-full" title="My Background">
+    <Card className="md:h-full">
       <div>
-        <p className="leading-[160%] font-normal text-white/[0.4] text-[16px]">
-          I was born in the humble small town in{" "}
+        <p className="leading-[170%] font-normal text-white/[0.4] text-[16px]">
+          I was born in{" "}
           <span className="text-white underline">
-            the Free State, called Frankfort
+            Frankfort, a small town in the Free State
           </span>
-          , in my early years I lived with my mother at her aunts homestead in
-          Free State. However I than moved to live in Johannesburg South in a
-          location called Ennerdale at the age of 3 years.
+          , and spent my early years at my mother&apos;s aunt&apos;s homestead
+          there before we moved to Ennerdale, in Johannesburg South, when I was
+          three.
           <br />
-          <span className="text-white underline">it was during this time</span>
-          &nbsp; that my fascination with &nbsp;
-          <span className="text-white underline">technology</span> &nbsp;
-          burrowed deep into my heart. From those formative years, I found
-          myself deeply immersed in &nbsp;
-          <span>the world of pc gaming (Doom, Mame32, Half-Life and Sims)</span>
-          &nbsp;, where my passion for technology began to flourish &nbsp;
           <br />
-          As I delved deeper into the realm of technology, I came across
-          programming and though it was magic.
+          That&apos;s where{" "}
+          <span className="text-white underline">technology got hold of me</span>
+          . PC gaming, mostly — <span>Doom, MAME32, Half-Life, The Sims</span> —
+          and somewhere in there I came across programming and thought it was
+          magic.{" "}
           <span className="text-white">
-            <em>Naturally</em> I wanted to understand this magic so I enrolled
-            in Rosebank College and graduated with at <strong>72%</strong>.
+            <em>Naturally</em> I wanted to understand the magic, so I enrolled at
+            IIE Rosebank College and graduated with a Diploma in IT in Software
+            Development at <strong>72%</strong>.
           </span>
+          <br />
+          <br />
           <span>
-            Since then I continued to do courses on topics I found interesting
-            and got employed at Tsimologong Digital Precint under the
-            Software Academy internhip programme sponsored by Samsung and
-            further grew as a Software Developer.
+            From there I joined the Software Academy internship at{" "}
+            <span className="text-white">Tshimologong Digital Precinct</span>,
+            sponsored by Samsung, and then moved into frontend work at{" "}
+            <span className="text-white">Munch</span> — where I&apos;ve spent the
+            last two years on a platform that restaurants actually run their
+            business on. Shipping to people whose revenue depends on your code
+            being right teaches you a particular kind of care.
           </span>
+          <br />
+          <br />
           <span className="text-white italic">
-            I am passionate about technology and just want to spread the
-            software love, gaming has shown me in my life to others who will
-            follow the path of technology like I did.
+            I&apos;m still doing this for the same reason I started: I like
+            building things, and I like passing on what I learn to whoever
+            follows the same path.
           </span>
         </p>
       </div>

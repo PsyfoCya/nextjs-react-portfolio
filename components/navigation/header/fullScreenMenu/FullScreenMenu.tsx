@@ -1,109 +1,14 @@
-// import { motion } from "framer-motion";
-// import { menuSlide } from "./animations";
-// import Curve from "./Curve";
-// import Profile from "@/components/ui/Profile";
-// import NavLink from "./NavLink";
-// import Link from "next/link";
-// import MenuCard from "./MenuCard";
-
-// const FullScreenMenu = () => {
-//   return (
-//     <motion.div
-//       variants={menuSlide}
-//       animate="enter"
-//       exit="exit"
-//       initial="initial"
-//       className="h-screen w-full bg-black fixed top-0 right-0 text-primary-foreground z-40 font-oswald"
-//     >
-//       <div className="relative w-full pl-[5%]">
-//         {/* Profile */}
-//         <div className="absolute top-8">
-//           <Profile />
-//         </div>
-//       </div>
-
-//       {/* Menu and Card */}
-//       <div className="absolute bottom-32 w-full lg:px-[5%]">
-//         <div
-//           className="grid relative"
-//           style={{ gridTemplateColumns: "1fr 500px" }}
-//         >
-//           <div className="pl-4 flex flex-col justify-end">
-//             {navItems.map((item, index) => (
-//               <NavLink key={index} data={{ ...item, index }} />
-//             ))}
-//           </div>
-//           {/* Menu about card */}
-//           <MenuCard/>
-//         </div>
-//       </div>
-
-//       {/* Footer links */}
-//       <div className="w-[95%] pl-[5%] absolute bottom-8">
-//         <div className="flex flex-wrap items-center justify-between uppercase text-white">
-//           {/* ---------- Left ----------- */}
-//           <div className="hidden">
-//             <Link href="/">LEGAL NOTICE</Link>
-//             <Link href="/">404</Link>
-//             <Link href="/">LEGAL STYLE</Link>
-//           </div>
-//           {/* ---------- Middel ----------- */}
-//           <div className="flex items-center gap-4">
-//             <Link href="https://www.linkedin.com/in/siyabonga-hadebe-25385620b/" target="_blank">LINKEDIN</Link>
-//             <Link href="https://www.instagram.com/psyfo_c_ya/" target="_blank">INSTAGRAM</Link>
-//             <Link href="https://www.youtube.com/@noiamnotsomebodyelse" target="_blank">YOUTUBE</Link>
-//           </div>
-//           {/* ---------- Right ----------- */}
-//           <div className="flex items-center gap-4">
-//             <Link href="/">©️2024</Link>
-//           </div>
-//         </div>
-//       </div>
-      
-
-//       {/*Curve SVG Effect */}
-//       <Curve />
-//     </motion.div>
-//   );
-// };
-
-// export default FullScreenMenu;
-
-// const navItems = [
-//   {
-//     title: "Home",
-//     href: "/#home",
-//   },
-//   {
-//     title: "Featured",
-//     href: "/#featured",
-//   },
-//   {
-//     title: "About",
-//     href: "/#about",
-//   },
-//   {
-//     title: "Projects",
-//     href: "/#projects",
-//   },
-//   {
-//     title: "Contact",
-//     href: "/#contact",
-//   },
-// ];
-
-
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { FC } from "react";
 import { menuSlide } from "./animations";
 import Curve from "./Curve";
-import Profile from "@/components/ui/Profile";
 import NavLink from "./NavLink";
-import Link from "next/link";
 import MenuCard from "./MenuCard";
-import { FC } from "react";
+import Profile from "@/components/ui/Profile";
 
 interface FullScreenMenuProps {
-  closeMenu: () => void; // Define the type for closeMenu
+  closeMenu: () => void;
 }
 
 const FullScreenMenu: FC<FullScreenMenuProps> = ({ closeMenu }) => {
@@ -113,40 +18,55 @@ const FullScreenMenu: FC<FullScreenMenuProps> = ({ closeMenu }) => {
       animate="enter"
       exit="exit"
       initial="initial"
-      className="h-screen w-full bg-black fixed top-0 right-0 text-primary-foreground z-40 font-oswald"
+      className="h-screen w-full bg-black fixed top-0 right-0 text-primary-foreground z-40 font-oswald overflow-y-auto overscroll-contain"
     >
-      <div className="relative w-full pl-[5%]">
-        <div className="absolute top-8">
-          <Profile />
-        </div>
-      </div>
+      {/*
+        Absolute positioning pinned the panel to a desktop viewport. A flex
+        column that can scroll keeps the whole menu reachable on a phone.
+      */}
+      <div className="relative z-40 flex min-h-screen flex-col gap-10 px-[5%] py-8 pr-20 sm:pr-[5%]">
+        <Profile />
 
-      <div className="absolute bottom-32 w-full lg:px-[5%]">
-        <div className="grid relative" style={{ gridTemplateColumns: "1fr 500px" }}>
-          <div className="pl-4 flex flex-col justify-end">
+        <div className="grid flex-1 items-end gap-8 lg:[grid-template-columns:1fr_500px]">
+          <div className="flex flex-col gap-1 pl-4 lg:justify-end">
             {navItems.map((item, index) => (
-              <NavLink key={index} data={{ ...item, index }} closeMenu={closeMenu} />
+              <NavLink
+                key={item.href}
+                data={{ ...item, index }}
+                closeMenu={closeMenu}
+              />
             ))}
           </div>
           <MenuCard closeMenu={closeMenu} />
         </div>
-      </div>
 
-      <div className="w-[95%] pl-[5%] absolute bottom-8">
-        <div className="flex flex-wrap items-center justify-between uppercase text-white">
-          <div className="hidden">
-            <Link href="/">LEGAL NOTICE</Link>
-            <Link href="/">404</Link>
-            <Link href="/">LEGAL STYLE</Link>
+        <div className="flex flex-wrap items-center justify-between gap-4 uppercase text-white">
+          <div className="flex flex-wrap items-center gap-4 text-sm sm:text-base">
+            <Link
+              href="https://www.linkedin.com/in/siyabonga-hadebe-25385620b/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LINKEDIN
+            </Link>
+            <Link
+              href="https://github.com/PsyfoCya"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GITHUB
+            </Link>
+            <Link
+              href="https://www.youtube.com/@noiamnotsomebodyelse"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              YOUTUBE
+            </Link>
           </div>
-          <div className="flex items-center gap-4">
-            <Link href="https://www.linkedin.com/in/siyabonga-hadebe-25385620b/" target="_blank">LINKEDIN</Link>
-            <Link href="https://www.instagram.com/psyfo_c_ya/" target="_blank">INSTAGRAM</Link>
-            <Link href="https://www.youtube.com/@noiamnotsomebodyelse" target="_blank">YOUTUBE</Link>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link href="/">©️2024</Link>
-          </div>
+          <span className="text-sm sm:text-base">
+            © {new Date().getFullYear()}
+          </span>
         </div>
       </div>
 
@@ -163,6 +83,10 @@ const navItems = [
     href: "#home",
   },
   {
+    title: "Work",
+    href: "#work",
+  },
+  {
     title: "Featured",
     href: "#featured",
   },
@@ -170,10 +94,6 @@ const navItems = [
     title: "About",
     href: "#about",
   },
-  // {
-  //   title: "Projects",
-  //   href: "#projects",
-  // },
   {
     title: "Contact",
     href: "#contact",

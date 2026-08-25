@@ -3,23 +3,27 @@ import Heading from "@/components/heading/Heading";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
-import SelectInput from "@/components/ui/SelectInput";
 import TextArea from "@/components/ui/TextArea";
 import { FormEvent, useRef, useState } from "react";
 import { FaProjectDiagram } from "react-icons/fa";
-import { FaPhoneVolume, FaUser } from "react-icons/fa6";
+import { FaLinkedin, FaUser } from "react-icons/fa6";
 import { MdEmail, MdSubject } from "react-icons/md";
 import { SiMinutemailer } from "react-icons/si";
 import emailjs from "@emailjs/browser";
 
+const EMAIL = "psyfohadebe@gmail.com";
+const LINKEDIN = "https://www.linkedin.com/in/siyabonga-hadebe-25385620b";
+
+type SendState = "idle" | "sending" | "sent" | "error";
+
 const Contact = () => {
   const formRef = useRef<HTMLFormElement>(null!);
   const btnRef = useRef<HTMLButtonElement>(null);
-  const [services, setServices] = useState<string[]>([]);
-  const [budgets, setBudgets] = useState<string[]>([]);
+  const [status, setStatus] = useState<SendState>("idle");
 
   const sendEmail = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    setStatus("sending");
     emailjs
       .sendForm(
         "service_ekwydfj",
@@ -28,45 +32,51 @@ const Contact = () => {
         "QGhpJXJQYGvV8ZiUL"
       )
       .then(
-        (res) => {
-          console.log(res.text);
-          console.log("Email sent successfully");
+        () => {
+          setStatus("sent");
+          formRef.current?.reset();
         },
-        (error) => {
-          console.log(error.text);
+        () => {
+          setStatus("error");
         }
       );
   };
 
-  // console.log("budgets", budgets);
-  // console.log("services", services);
   return (
-    <div className="pt-24 px-3 lg:px-8">
-      <Heading number="03" title_1="Contact" title_2="Me" />
+    <div className="pt-16 sm:pt-24 px-3 lg:px-8">
+      <Heading
+        number="05"
+        title_1="Contact"
+        title_2="Me"
+        svgText="EMAIL IS THE FASTEST WAY TO REACH ME"
+      />
       <Card>
-        <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Contact Cards */}
           <div className="flex flex-col gap-8">
             <ContactCard
-              title="Call Me directly at"
-              text="069 378 8872"
-              icon={<FaPhoneVolume className="fill-[#333] text-lg" />}
-              btnText="Call Me"
-            />
-            <ContactCard
-              title="Chat with me directly"
-              text="psyfohadebe@gmail.com"
+              title="Email me directly"
+              text={EMAIL}
               icon={<MdEmail className="fill-[#333] text-lg" />}
               btnText="Email Me"
+              href={`mailto:${EMAIL}`}
+            />
+            <ContactCard
+              title="Or find me on"
+              text="LinkedIn"
+              icon={<FaLinkedin className="fill-[#333] text-lg" />}
+              btnText="Connect"
+              href={LINKEDIN}
             />
           </div>
+
           {/* Contact Form */}
           <form
             ref={formRef}
             onSubmit={sendEmail}
             className="lg:col-span-2 !bg-secondary-background border border-border rounded-lg space-y-6 relative overflow-hidden py-5 px-[25px] shadow-md"
           >
-            <div className="flex flex-col lg:flex-row item-center justify- between mb-4 gap-8">
+            <div className="flex flex-col lg:flex-row item-center justify-between mb-4 gap-8">
               <Input
                 name="name"
                 type="text"
@@ -88,73 +98,26 @@ const Contact = () => {
                 icon={<MdSubject />}
               />
             </div>
-            {/* Multiple Select Wrapper */}
-            <div className="flex flex-col gap-6 ">
-              <div className="space-y-6">
-                <h1 className="font-bold text-lg">
-                  What services are you looking for?
-                </h1>
-                <div className="flex flex-wrap items-center justify-between mb-4 gap-8">
-                  {/* Services */}
-                  {serviceOptions.map((service) => (
-                    <SelectInput
-                      key={service.id}
-                      type="checkbox"
-                      id={service.id}
-                      text={service.text}
-                      selectedOptions={services}
-                      setSelectedOptions={setServices}
-                      allowMultiple
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-            {/* Multiple Select Wrapper */}
-            <div className="flex flex-col gap-6 ">
-              <div className="space-y-6">
-                <h1 className="font-bold text-lg"> What is your budget?</h1>
-                <div className="flex flex-wrap items-center justify-between mb-4 gap-8">
-                  {/* Budget Options */}
-                  {budgetOptions.map((budget) => (
-                    <SelectInput
-                      key={budget.id}
-                      type="radio"
-                      id={budget.id}
-                      text={budget.text}
-                      selectedOptions={budgets}
-                      setSelectedOptions={setBudgets}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
+
             {/* TextArea Message */}
             <TextArea
               name="message"
-              placeholder="Tell me about your project"
+              placeholder="What would you like to talk about?"
               icon={<FaProjectDiagram />}
             />
-            <div className="w-full flex justify-end">
+
+            <div className="w-full flex items-center justify-between gap-4">
+              <p
+                role="status"
+                aria-live="polite"
+                className="text-sm text-secondary-foreground"
+              >
+                {statusMessage[status]}
+              </p>
               <div onClick={() => btnRef.current?.click()}>
                 <Button className={"!w-44 !py-3 !text-xl"}>
-                  Send <SiMinutemailer />
+                  {status === "sending" ? "Sending" : "Send"} <SiMinutemailer />
                 </Button>
-              </div>
-              {/* Hidden Services and Budget inputs */}
-              <div className="hidden">
-                <input
-                  type="text"
-                  value={services.join(", ")}
-                  name="services"
-                  hidden
-                />
-                <input
-                  type="text"
-                  value={budgets.join(", ")}
-                  name="budget"
-                  hidden
-                />
               </div>
               <button type="submit" hidden ref={btnRef}></button>
             </div>
@@ -167,40 +130,9 @@ const Contact = () => {
 
 export default Contact;
 
-const serviceOptions = [
-  {
-    id: "Web Design",
-    text: "Web Design",
-  },
-  {
-    id: "Design Implementation",
-    text: "Design Implementation",
-  },
-  {
-    id: "Web Development",
-    text: "Web Development",
-  },
-  {
-    id: "Logo Design",
-    text: "Logo Design",
-  },
-];
-
-const budgetOptions = [
-  {
-    id: "less than 1k",
-    text: "< R1 000",
-  },
-  {
-    id: "between 1k and 2k",
-    text: "R1 000 - R2 0000",
-  },
-  {
-    id: "between 2k and 5k",
-    text: "R2 000 - R5 000",
-  },
-  {
-    id: "more than 5k",
-    text: "> R5 000",
-  },
-];
+const statusMessage: Record<SendState, string> = {
+  idle: "",
+  sending: "Sending…",
+  sent: "Thanks — message sent. I'll get back to you.",
+  error: `Something went wrong. Email me directly at ${EMAIL}.`,
+};

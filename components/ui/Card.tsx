@@ -2,9 +2,9 @@ import { cn } from "@/lib/utils";
 import { FC, ReactNode } from "react";
 
 interface CardProps {
-  title?: String;
+  title?: string;
   children: ReactNode;
-  className?: String;
+  className?: string;
 }
 
 const Card: FC<CardProps> = ({ title, children, className }) => {
