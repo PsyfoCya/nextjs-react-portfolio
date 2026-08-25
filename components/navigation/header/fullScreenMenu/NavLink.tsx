@@ -1,56 +1,8 @@
-// import { FC, useState } from "react";
-// import { motion } from "framer-motion";
-// import { scale, slide } from "./animations";
-// import Link from "next/link";
-
-// interface NavLinkOrops {
-//   data: {
-//     title: string;
-//     href: string;
-//     index: number;
-//   };
-// }
-
-// const NavLink: FC<NavLinkOrops> = ({ data }) => {
-//   const { title, href, index } = data;
-//   const [hovered, setHovered] = useState<boolean>(false);
-
-//   return (
-//     <motion.div
-//       className="relative flex items-center"
-//       variants={slide}
-//       custom={index}
-//       initial="initial"
-//       animate="enter"
-//       exit="exit"
-//       onMouseEnter={() => {
-//         setHovered(true);
-//       }}
-//       onMouseLeave={() => {
-//         setHovered(false);
-//       }}
-//     >
-//       <motion.div
-//         variants={scale}
-//         animate={hovered ? "open" : "closed"}
-//         className="w-2 h-2.5 bg-white rounded-full absolute -left-[30px]"
-//       ></motion.div>
-//       <Link
-//         href={href}
-//         className="text-[6vw] uppercase leading-[96%] font-bold"
-//       >
-//         {title}
-//       </Link>
-//     </motion.div>
-//   );
-// };
-
-// export default NavLink;
-
-import { FC, useState, MouseEvent } from "react";
+import { FC, MouseEvent, useState } from "react";
 import { motion } from "framer-motion";
-import { scale, slide } from "./animations";
 import Link from "next/link";
+import { scale, slide } from "./animations";
+import { isHashLink, scrollToHash } from "@/lib/utils";
 
 interface NavLinkProps {
   data: {
@@ -58,19 +10,18 @@ interface NavLinkProps {
     href: string;
     index: number;
   };
-  closeMenu: () => void; // Define the type for closeMenu
+  closeMenu: () => void;
 }
 
 const NavLink: FC<NavLinkProps> = ({ data, closeMenu }) => {
   const { title, href, index } = data;
   const [hovered, setHovered] = useState<boolean>(false);
 
-  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
+  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
     closeMenu();
-    const targetElement = document.querySelector(href);
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: "smooth" });
+    // Route links navigate normally; only in-page anchors get intercepted.
+    if (isHashLink(href) && scrollToHash(href)) {
+      e.preventDefault();
     }
   };
 
@@ -84,14 +35,17 @@ const NavLink: FC<NavLinkProps> = ({ data, closeMenu }) => {
       exit="exit"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      onClick={handleClick}
     >
       <motion.div
         variants={scale}
         animate={hovered ? "open" : "closed"}
         className="w-2 h-2.5 bg-white rounded-full absolute -left-[30px]"
       ></motion.div>
-      <Link href={href} className="text-[6vw] uppercase leading-[96%] font-bold">
+      <Link
+        href={href}
+        onClick={handleClick}
+        className="text-[9vw] lg:text-[6vw] uppercase leading-[110%] lg:leading-[96%] font-bold"
+      >
         {title}
       </Link>
     </motion.div>
@@ -99,4 +53,3 @@ const NavLink: FC<NavLinkProps> = ({ data, closeMenu }) => {
 };
 
 export default NavLink;
-

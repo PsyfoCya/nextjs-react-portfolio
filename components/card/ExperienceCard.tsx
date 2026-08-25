@@ -1,18 +1,24 @@
-import React from "react";
 import Card from "../ui/Card";
 import Timeline, { TimelineItem } from "../ui/Timeline";
 
-function ExperienceCard() {
-  const experiencesData = [
-    {
-      date: "2023 - 2024 • 1yr",
-      title: "Software Developer Intern",
-      subTitle: "Wits Incubator - Tshimologong Digital Precinct",
-      link: "https://tshimologong.joburg/",
-      tag: "Onsite/Hybrid",
-    },
-  ];
+const experiencesData = [
+  {
+    date: "2024 - Present • 2 yrs",
+    title: "Frontend Developer",
+    subTitle: "Munch — restaurant management & online ordering",
+    link: "/work",
+    tag: "Full-time",
+  },
+  {
+    date: "2023 - 2024 • 1 yr",
+    title: "Software Developer Intern",
+    subTitle: "Wits Incubator - Tshimologong Digital Precinct",
+    link: "https://tshimologong.joburg/",
+    tag: "Onsite/Hybrid",
+  },
+];
 
+function ExperienceCard() {
   return (
     <Card title="My Experience">
       <Timeline>

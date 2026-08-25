@@ -2,7 +2,6 @@
 
 import moment from "moment-timezone";
 import { FC, useEffect, useState } from "react";
-// import { clearInterval } from "timers";
 
 interface LiveClockProps {
   timeZone: string;
@@ -17,6 +16,8 @@ const LiveClock: FC<LiveClockProps> = ({ timeZone }) => {
       setTime(currentTime);
     };
 
+    // Render the first tick immediately rather than after a second of "loading".
+    updateClock();
     const intervalId = setInterval(updateClock, 1000);
 
     // Cleanup Interval on component unmount
@@ -24,10 +25,9 @@ const LiveClock: FC<LiveClockProps> = ({ timeZone }) => {
   }, [timeZone]);
 
   return (
-    <div className=" text-3xl text-secondary-foreground font-semibold">
-      {/* {timeZone}, {time} */}
+    <div className="text-xl sm:text-2xl lg:text-3xl text-secondary-foreground font-semibold">
       {time ? (
-        <div className="flex items-center justify-center gap-[2vw]">
+        <div className="flex items-center justify-center gap-2 sm:gap-[2vw] whitespace-nowrap">
           <span>{timeZone}</span>
           <span>{time}</span>
         </div>

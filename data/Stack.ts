@@ -12,8 +12,30 @@ import NodeImg from "@/public/assets/stack/nodejs.png";
 import SpringImg from "@/public/assets/stack/springboot.png";
 import MySqlImg from "@/public/assets/stack/mySql.png";
 import MongoDbImg from "@/public/assets/stack/mongoDb.png";
+import type { StaticImageData } from "next/image";
+import { createElement, type ReactNode } from "react";
+import {
+  SiFigma,
+  SiGit,
+  SiPlaywright,
+  SiReactquery,
+  SiStorybook,
+} from "react-icons/si";
 
-export const stackData = [
+interface StackItem {
+  id: number;
+  title: string;
+  image?: StaticImageData;
+  icon?: ReactNode;
+  bgColor?: string;
+}
+
+interface StackGroup {
+  title: string;
+  stack: StackItem[];
+}
+
+export const stackData: StackGroup[] = [
   {
     title: "Frontend",
     stack: [
@@ -83,12 +105,6 @@ export const stackData = [
       },
     ],
   },
-  // {
-  //   title: "Animations",
-  //   stack: [
-     
-  //   ],
-  // },
   {
     title: "Backend / DB's",
     stack: [
@@ -129,10 +145,39 @@ export const stackData = [
       },
     ],
   },
-  // {
-  //   title: "DB's",
-  //   stack: [
-      
-  //   ],
-  // },
+  {
+    title: "Testing / Tooling",
+    stack: [
+      {
+        id: 0,
+        title: "Storybook",
+        icon: createElement(SiStorybook, { color: "#FF4785" }),
+        bgColor: "",
+      },
+      {
+        id: 1,
+        title: "Playwright",
+        icon: createElement(SiPlaywright, { color: "#2EAD33" }),
+        bgColor: "",
+      },
+      {
+        id: 2,
+        title: "TanStack Query",
+        icon: createElement(SiReactquery, { color: "#FF4154" }),
+        bgColor: "",
+      },
+      {
+        id: 3,
+        title: "Git",
+        icon: createElement(SiGit, { color: "#F1502F" }),
+        bgColor: "",
+      },
+      {
+        id: 4,
+        title: "Figma",
+        icon: createElement(SiFigma, { color: "#F24E1E" }),
+        bgColor: "",
+      },
+    ],
+  },
 ];

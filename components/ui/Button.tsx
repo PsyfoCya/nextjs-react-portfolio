@@ -6,15 +6,29 @@ import { FC, ReactNode } from "react";
 interface ButtonProps {
   children: ReactNode;
   link?: Url;
-  isIcon?: Boolean;
-  className?: String;
+  isIcon?: boolean;
+  className?: string;
+  /** Accessible name — required when the button only renders an icon. */
+  ariaLabel?: string;
 }
 
-const Button: FC<ButtonProps> = ({ children, link, isIcon, className }) => {
+const Button: FC<ButtonProps> = ({
+  children,
+  link,
+  isIcon,
+  className,
+  ariaLabel,
+}) => {
   return (
     <>
       {link ? (
-        <Link href={link} target="_blank" className="w-10 h-10 cursor-pointer">
+        <Link
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={ariaLabel}
+          className="w-10 h-10 cursor-pointer"
+        >
           <ButtonBody className={className} isIcon={isIcon}>
             {children}
           </ButtonBody>
@@ -30,8 +44,8 @@ const Button: FC<ButtonProps> = ({ children, link, isIcon, className }) => {
 
 interface ButtonBodyProps {
   children: ReactNode;
-  isIcon?: Boolean;
-  className?: String;
+  isIcon?: boolean;
+  className?: string;
 }
 
 const ButtonBody: FC<ButtonBodyProps> = ({ children, isIcon, className }) => {
@@ -40,8 +54,8 @@ const ButtonBody: FC<ButtonBodyProps> = ({ children, isIcon, className }) => {
       <div
         className={cn(
           "flex items-center justify-center gap-2 bg-primary-background rounded-full select-none whitespace-nowrap text-primary-foreground text-sm font-medium hover:bg-white/[0.1] transition-colors duration-100",
-          className, 
-          isIcon ? "h-10 w-10" : "h-full w-max px-3 py-2" 
+          className,
+          isIcon ? "h-10 w-10" : "h-full w-max px-3 py-2"
         )}
       >
         {children}

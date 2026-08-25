@@ -1,4 +1,4 @@
-import { FC, ReactNode, useRef, useState } from "react";
+import { FC, MouseEvent, ReactNode, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -10,7 +10,7 @@ interface MagneticWrapperProps {
 const MagneticWrapper: FC<MagneticWrapperProps> = ({ className, children }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const handleMouse = (e: MouseEvent) => {
+  const handleMouse = (e: MouseEvent<HTMLDivElement>) => {
     const { clientX, clientY } = e;
     const boundingRect = ref.current?.getBoundingClientRect();
     if (boundingRect) {

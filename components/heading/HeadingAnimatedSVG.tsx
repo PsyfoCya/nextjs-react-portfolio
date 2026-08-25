@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { FC, useState } from "react";
+import { FC, useId, useState } from "react";
 
 interface HeadingAnimatedSvg {
   animated?: boolean;
@@ -11,9 +11,14 @@ export const HeadingAnimatedSvg: FC<HeadingAnimatedSvg> = ({
   text,
 }) => {
   const [active, setActive] = useState<boolean>(animated || false);
+  // Every instance rendered its own copy of the same hardcoded ids, which meant
+  // duplicate ids in the document and a textPath href that could resolve to the
+  // wrong node. useId gives each instance its own.
+  const instanceId = useId();
+  const curveId = `heading-curve-${instanceId}`;
   return (
     <div
-      className="link relative flex items-center justify-center w-[50px] -mb-10 z-20"
+      className="link relative flex shrink-0 items-center justify-center w-[34px] sm:w-[50px] -mb-6 sm:-mb-10 z-20"
       onMouseEnter={() => setActive(true)}
       onMouseLeave={() => setActive(false)}
     >
@@ -21,13 +26,17 @@ export const HeadingAnimatedSvg: FC<HeadingAnimatedSvg> = ({
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
-        viewBox="0 0 384 384" // Adjust this viewBox based on your SVG content
-        width={active ? 30 : 50}
-        height={active ? 30 : 50}
-        className={cn("origin-center transition-all duration-700 ease-in", active && "animate-spin")}
+        viewBox="0 0 384 384"
+        className={cn(
+          "origin-center transition-all duration-700 ease-in",
+          active
+            ? "w-[22px] h-[22px] sm:w-[30px] sm:h-[30px]"
+            : "w-[34px] h-[34px] sm:w-[50px] sm:h-[50px]",
+          active && "animate-spin"
+        )}
       >
         <path
-          id="dp_path001"
+          id={`heading-star-${instanceId}`}
           transform="matrix(1,0,0,1,-236.031,-39.0307)"
           fill={active ? "#fff" : "#fff"}
           stroke="none"
@@ -42,19 +51,19 @@ export const HeadingAnimatedSvg: FC<HeadingAnimatedSvg> = ({
         )}
       >
         <svg
-          className="absolute top-1/2 left-1/2 w-14 h-14 -translate-x-1/2 -translate-y-1/2"
+          className="absolute top-1/2 left-1/2 w-10 h-10 sm:w-14 sm:h-14 -translate-x-1/2 -translate-y-1/2"
           viewBox="0 0 100 100"
           overflow="visible"
         >
           <path
-            id="curve-wnxkz4"
+            id={curveId}
             d="M 0 50 L 0 50 A 1 1 0 0 1 100 50 L 100 50 L 100 50 A 1 1 0 0 1 0 50 L 0 50"
             strokeWidth="none"
             fill="transparent"
           />
           <text>
             <textPath
-              href="#curve-wnxkz4"
+              href={`#${curveId}`}
               startOffset={0}
               dominantBaseline="Central"
               style={{

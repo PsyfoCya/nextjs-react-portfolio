@@ -1,4 +1,3 @@
-import React from "react";
 import Card from "../ui/Card";
 import { stackData } from "@/data/Stack";
 import Tooltip from "../ui/Tooltip";
@@ -7,24 +6,26 @@ const StackCard = () => {
   return (
     <Card title="My Tech Stack">
       <div className="flex flex-col gap-6 mt-2">
-        {stackData.map((tech, i) => (
+        {stackData.map((group) => (
           <div
-            key={i}
-            className="grid items-center gap-[90px]"
-            style={{ gridTemplateColumns: "50px 1fr" }}
+            key={group.title}
+            className="flex flex-col gap-3 sm:grid sm:items-center sm:gap-x-[90px] sm:gap-y-0 sm:[grid-template-columns:50px_1fr]"
           >
             {/* Stack Group Name */}
-            <div className="h-auto flex-none break-words whitespace-pre">
-              <p className="text-secondary-foreground">{tech.title}</p>
+            <div className="h-auto flex-none break-words">
+              <p className="text-secondary-foreground sm:whitespace-pre">
+                {group.title}
+              </p>
             </div>
             {/* ToolTip */}
-            <div className="flex gap-4">
-              {tech.stack.map((t) => (
+            <div className="flex flex-wrap gap-3 sm:gap-4">
+              {group.stack.map((tech) => (
                 <Tooltip
-                  key={t.id}
-                  title={t.title}
-                  image={t.image}
-                  bgColor={t.bgColor}
+                  key={tech.id}
+                  title={tech.title}
+                  image={tech.image}
+                  icon={tech.icon}
+                  bgColor={tech.bgColor}
                 />
               ))}
             </div>
