@@ -5,9 +5,21 @@ interface InputProps {
   placeholder: string;
   type: "email" | "text" | "password";
   name: string;
+  /** Browser-level validation so empty submissions never reach EmailJS. */
+  required?: boolean;
+  disabled?: boolean;
+  autoComplete?: string;
 }
 
-const Input: FC<InputProps> = ({ icon, placeholder, type, name }) => {
+const Input: FC<InputProps> = ({
+  icon,
+  placeholder,
+  type,
+  name,
+  required,
+  disabled,
+  autoComplete,
+}) => {
   return (
     <div className="relative w-full">
       {/* Icon */}
@@ -18,7 +30,11 @@ const Input: FC<InputProps> = ({ icon, placeholder, type, name }) => {
         type={type}
         name={name}
         placeholder={placeholder}
-        className="!bg-primary-background text-primary-foreground w-full rounded-lg text-sm ps-10 px-2.5 py-4 focus:outline-none"
+        required={required}
+        disabled={disabled}
+        autoComplete={autoComplete}
+        aria-label={placeholder}
+        className="!bg-primary-background text-primary-foreground w-full rounded-lg text-sm ps-10 px-2.5 py-4 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/40 disabled:opacity-60"
       />
     </div>
   );

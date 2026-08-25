@@ -1,3 +1,5 @@
+"use client";
+
 import ContactCard from "@/components/card/ContactCard";
 import Heading from "@/components/heading/Heading";
 import Button from "@/components/ui/Button";
@@ -10,37 +12,80 @@ import { FaLinkedin, FaUser } from "react-icons/fa6";
 import { MdEmail, MdSubject } from "react-icons/md";
 import { SiMinutemailer } from "react-icons/si";
 import emailjs from "@emailjs/browser";
+import { emailjsConfig, toTemplateParams } from "@/lib/emailjs";
 
 const EMAIL = "psyfohadebe@gmail.com";
 const LINKEDIN = "https://www.linkedin.com/in/siyabonga-hadebe-25385620b";
 
 type SendState = "idle" | "sending" | "sent" | "error";
 
-const Contact = () => {
-  const formRef = useRef<HTMLFormElement>(null!);
-  const btnRef = useRef<HTMLButtonElement>(null);
-  const [status, setStatus] = useState<SendState>("idle");
+/** Shape EmailJS rejects with — a status code plus the server's message. */
+interface EmailJSError {
+  status?: number;
+  text?: string;
+}
 
-  const sendEmail = (e: FormEvent<HTMLFormElement>): void => {
+const Contact = () => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [status, setStatus] = useState<SendState>("idle");
+  const [errorDetail, setErrorDetail] = useState<string>("");
+
+  const sendEmail = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
+
+    const form = formRef.current;
+    if (!form || status === "sending") return;
+
+    const data = new FormData(form);
+    const value = (field: string) => String(data.get(field) ?? "").trim();
+
+    // Bots fill in every field they can see, including the hidden one.
+    if (value("company")) {
+      setStatus("sent");
+      form.reset();
+      return;
+    }
+
     setStatus("sending");
-    emailjs
-      .sendForm(
-        "service_ekwydfj",
-        "template_j7rrh0n",
-        formRef.current,
-        "QGhpJXJQYGvV8ZiUL"
-      )
-      .then(
-        () => {
-          setStatus("sent");
-          formRef.current?.reset();
-        },
-        () => {
-          setStatus("error");
+    setErrorDetail("");
+
+    try {
+      await emailjs.send(
+        emailjsConfig.serviceId,
+        emailjsConfig.templateId,
+        toTemplateParams({
+          name: value("name"),
+          email: value("email"),
+          subject: value("subject"),
+          message: value("message"),
+        }),
+        {
+          publicKey: emailjsConfig.publicKey,
+          // Cheap client-side brake on repeat submissions. The real limit
+          // belongs in the EmailJS dashboard, since anyone can bypass this.
+          limitRate: { id: "contact", throttle: 10_000 },
         }
       );
+
+      setStatus("sent");
+      form.reset();
+    } catch (error) {
+      const { status: code, text } = (error ?? {}) as EmailJSError;
+
+      // Without this the failure is invisible: the previous version passed an
+      // onError callback that ignored its argument, so a misconfigured
+      // template or a blocked domain looked identical to a network drop.
+      setErrorDetail(
+        [code && `HTTP ${code}`, text].filter(Boolean).join(" — ") ||
+          "Network request failed"
+      );
+      // eslint-disable-next-line no-console
+      console.error("EmailJS send failed:", error);
+      setStatus("error");
+    }
   };
+
+  const isSending = status === "sending";
 
   return (
     <div className="pt-16 sm:pt-24 px-3 lg:px-8">
@@ -82,12 +127,18 @@ const Contact = () => {
                 type="text"
                 placeholder="Full Name"
                 icon={<FaUser />}
+                autoComplete="name"
+                required
+                disabled={isSending}
               />
               <Input
                 name="email"
                 type="email"
                 placeholder="Email Address"
                 icon={<MdEmail />}
+                autoComplete="email"
+                required
+                disabled={isSending}
               />
             </div>
             <div className="flex item-center justify-between mb-4 gap-8">
@@ -96,6 +147,8 @@ const Contact = () => {
                 type="text"
                 placeholder="Subject"
                 icon={<MdSubject />}
+                required
+                disabled={isSending}
               />
             </div>
 
@@ -104,22 +157,45 @@ const Contact = () => {
               name="message"
               placeholder="What would you like to talk about?"
               icon={<FaProjectDiagram />}
+              required
+              disabled={isSending}
             />
 
-            <div className="w-full flex items-center justify-between gap-4">
+            {/* Honeypot — invisible to people, irresistible to bots. */}
+            <div aria-hidden className="absolute -left-[9999px] top-0">
+              <label>
+                Company
+                <input
+                  type="text"
+                  name="company"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </label>
+            </div>
+
+            <div className="w-full flex flex-wrap items-center justify-between gap-4">
               <p
                 role="status"
                 aria-live="polite"
                 className="text-sm text-secondary-foreground"
               >
-                {statusMessage[status]}
+                {status === "error"
+                  ? `${statusMessage.error}${
+                      errorDetail ? ` (${errorDetail})` : ""
+                    }`
+                  : statusMessage[status]}
               </p>
-              <div onClick={() => btnRef.current?.click()}>
+              <button
+                type="submit"
+                disabled={isSending}
+                aria-label="Send message"
+                className="link rounded-full disabled:cursor-not-allowed disabled:opacity-60"
+              >
                 <Button className={"!w-44 !py-3 !text-xl"}>
-                  {status === "sending" ? "Sending" : "Send"} <SiMinutemailer />
+                  {isSending ? "Sending" : "Send"} <SiMinutemailer />
                 </Button>
-              </div>
-              <button type="submit" hidden ref={btnRef}></button>
+              </button>
             </div>
           </form>
         </div>

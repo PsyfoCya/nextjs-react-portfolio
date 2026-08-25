@@ -4,9 +4,18 @@ interface TextAreaProps {
   icon?: ReactNode;
   placeholder: string;
   name: string;
+  /** Browser-level validation so empty submissions never reach EmailJS. */
+  required?: boolean;
+  disabled?: boolean;
 }
 
-const TextArea: FC<TextAreaProps> = ({ icon, placeholder, name }) => {
+const TextArea: FC<TextAreaProps> = ({
+  icon,
+  placeholder,
+  name,
+  required,
+  disabled,
+}) => {
   return (
     <div className="relative w-full">
       {/* Icon */}
@@ -16,7 +25,10 @@ const TextArea: FC<TextAreaProps> = ({ icon, placeholder, name }) => {
       <textarea
         name={name}
         placeholder={placeholder}
-        className="bg-primary-background text-primary-foreground w-full rounded-lg text-sm ps-10 p-2.5 pt-9 focus:outline-none cursor-none"
+        required={required}
+        disabled={disabled}
+        aria-label={placeholder}
+        className="bg-primary-background text-primary-foreground w-full rounded-lg text-sm ps-10 p-2.5 pt-9 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/40 disabled:opacity-60 cursor-none"
       />
     </div>
   );
