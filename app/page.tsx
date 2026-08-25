@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import ScrollMemory from "@/components/layout/ScrollMemory";
 import About from "@/sections/About";
 import Contact from "@/sections/Contact";
 import Featured from "@/sections/Featured";
@@ -25,6 +26,8 @@ export default function Home() {
     >
       {() => (
         <div className="pb-8">
+          {/* Puts you back where you were when you return from a case study. */}
+          <ScrollMemory />
           <section id="home">
             <Landing />
           </section>
