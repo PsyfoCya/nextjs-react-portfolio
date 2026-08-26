@@ -10,6 +10,7 @@ import {
   secondaryCaseStudies,
 } from "@/data/Index";
 import Section from "@/components/ui/Section";
+import Reveal from "@/components/visualEffects/Reveal";
 
 const Work = () => {
   return (
@@ -73,22 +74,26 @@ const Work = () => {
 
       {/* The three headline case studies */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
-        {featuredCaseStudies.map((study) => (
-          <CaseStudyCard key={study.slug} study={study} />
+        {featuredCaseStudies.map((study, i) => (
+          <Reveal key={study.slug} index={i} className="h-full">
+            <CaseStudyCard study={study} />
+          </Reveal>
         ))}
       </div>
 
       {/* Shorter write-ups */}
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-        {secondaryCaseStudies.map((study) => (
-          <CaseStudyCard key={study.slug} study={study} variant="compact" />
+        {secondaryCaseStudies.map((study, i) => (
+          <Reveal key={study.slug} index={i} className="h-full">
+            <CaseStudyCard study={study} variant="compact" />
+          </Reveal>
         ))}
       </div>
 
       <div className="mt-10 flex justify-center">
         <Link
           href="/work"
-          className="link group flex items-center gap-3 rounded-full border border-border bg-primary-background px-6 py-3 text-primary-foreground transition-colors duration-200 hover:bg-white/[0.1]"
+          className="gradient-ring link group flex items-center gap-3 rounded-full px-6 py-3 text-primary-foreground"
         >
           <span className="font-medium">Read all case studies</span>
           <FiArrowRight

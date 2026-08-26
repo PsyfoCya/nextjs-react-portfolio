@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Cursor from "@/components/cursor/Cursor";
+import Motion from "@/components/visualEffects/Motion";
 
 // Fonts
 const MainFont = Bricolage_Grotesque({ subsets: ["latin"] });
@@ -62,8 +63,10 @@ export default function RootLayout({
           PixelFont.variable
         )}
       >
-        <Cursor color="red" />
-        {children}
+        <Motion>
+          <Cursor color="var(--signature-1)" />
+          {children}
+        </Motion>
       </body>
     </html>
   );

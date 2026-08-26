@@ -1,7 +1,6 @@
 import Header from "@/components/navigation/header/Header";
 import ContactCta from "@/components/ui/ContactCta";
 import LiveClock from "@/components/ui/LiveClock";
-import BadgeStage from "@/components/badge3d/BadgeStage";
 
 const strapline = [
   "Frontend developer in Johannesburg",
@@ -15,13 +14,6 @@ const Landing = () => {
     <div className="relative min-h-screen overflow-hidden p-4 sm:p-8">
       {/* Header */}
       <Header />
-
-      {/*
-        Interactive lanyard badge. Lives in the right gutter on wide screens
-        only and is layered over the hero rather than restructuring it, so the
-        headline keeps the mobile layout it was fixed into.
-      */}
-      <BadgeStage />
 
       {/* Slogan */}
       <div className="relative flex flex-col justify-center items-center mt-8 leading-[14vw] lg:leading-[10vw] 2xl:leading-[9rem] font-medium tracking-[-0.2rem] sm:tracking-[-0.3rem]">

@@ -17,9 +17,10 @@ const CaseStudyCard = ({ study, variant = "large" }: CaseStudyCardProps) => {
     <Link
       href={`/work/${study.slug}`}
       className={cn(
-        "link group flex h-full flex-col justify-between gap-6 rounded-2xl",
-        "border border-border bg-primary-background p-6",
-        "transition-colors duration-200 hover:bg-white/[0.08]"
+        "gradient-ring link group flex h-full flex-col justify-between gap-6 rounded-2xl p-6",
+        // The old hover was white/.05 -> white/.08 — a 3% delta, effectively
+        // invisible. The ring carries it now; this is just a lift underneath.
+        "transition-transform duration-300 hover:-translate-y-0.5"
       )}
     >
       <div className="flex flex-col gap-4">

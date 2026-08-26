@@ -28,5 +28,6 @@ export const menuLinks: readonly NavLinkItem[] = [
   { title: "EDUCATION", link: "#education" },
   { title: "CERTIFICATIONS", link: "#certifications" },
   { title: "TECH STACK", link: "#stack" },
+  { title: "THE BADGE", link: "#badge" },
   { title: "HOBBIES", link: "#hobbies" },
 ];

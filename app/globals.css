@@ -19,11 +19,112 @@
     var(--signature-3) 67%,
     var(--signature-4)
   );
+
+  /* The opaque fill a ringed card sits on, over the black page. */
+  --card-surface: #0d0d0d;
+}
+
+/*
+  Registered custom properties can be interpolated; plain ones cannot. The
+  angle sweeps the ring, and the dim fades it up on hover.
+*/
+@property --ring-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --ring-dim {
+  syntax: "<number>";
+  initial-value: 0.75;
+  inherits: false;
 }
 
 body {
   background-color: black;
   color: azure;
+}
+
+/*
+  The ring.
+
+  Two backgrounds on one element: an opaque fill clipped to the padding box,
+  and the signature gradient clipped to the border box. The 1px transparent
+  border is the only place the gradient shows through, so it reads as a
+  hairline ring around the card.
+
+  Idle cards hold the gradient dimmed, so the palette is present without
+  anything moving. It only sweeps while hovered or focused — one ring at a
+  time, rather than every card on the page turning at once.
+
+  The dimming is a black layer composited over the conic gradient inside the
+  border box, NOT a `filter` on the element — a filter would desaturate the
+  card's own text and images along with the ring.
+*/
+.gradient-ring {
+  border: 1px solid transparent;
+  background-image:
+    linear-gradient(var(--card-surface), var(--card-surface)),
+    linear-gradient(rgb(0 0 0 / var(--ring-dim)), rgb(0 0 0 / var(--ring-dim))),
+    conic-gradient(
+      from var(--ring-angle),
+      var(--signature-1),
+      var(--signature-2) 25%,
+      var(--signature-3) 50%,
+      var(--signature-4) 75%,
+      var(--signature-1)
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box, border-box;
+  transition:
+    --ring-dim 400ms ease,
+    box-shadow 400ms ease;
+}
+
+.gradient-ring:hover,
+.gradient-ring:focus-visible,
+.gradient-ring:focus-within {
+  --ring-dim: 0;
+  box-shadow: 0 10px 44px -18px rgb(113 121 239 / 0.45);
+  animation: ring-sweep 6s linear infinite;
+}
+
+@keyframes ring-sweep {
+  to {
+    --ring-angle: 360deg;
+  }
+}
+
+/*
+  Focus. Only the two form fields had a visible focus state before, so every
+  card, link and button fell back to the browser default outline — invisible
+  on black.
+*/
+:where(a, button, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--signature-1);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/*
+  One of roughly a dozen motion sources respected this before. Anything that
+  loops, sweeps or slides is answerable to it.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .gradient-ring:hover,
+  .gradient-ring:focus-visible,
+  .gradient-ring:focus-within {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @layer utilities {
