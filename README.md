@@ -82,14 +82,14 @@ was empty.
   carry `"use client"`, so the static sections ship as HTML rather than JS.
   Keep it that way — wrapping the page in a client component puts the entire
   home page back into the bundle and out of the prerendered HTML.
-- The lanyard badge (`components/badge3d/`) mounts only above 1280px, and via a
+- The lanyard access card (`components/accessCard/`) mounts only above 1280px, via a
   JS media query rather than a `hidden lg:block` class — CSS would hide it while
   still mounting the component and downloading three.js and rapier's wasm on
   phones. Visitors who ask for reduced motion get a static card instead. Its
   canvas and physics world pause via `useInViewport` when scrolled away.
 - Anything that runs on a timer or a frame loop should be gated on
   `useInViewport` (`lib/useInViewport.ts`) — the gallery autoplay, the project
-  videos and the badge all are.
+  videos and the access card all are.
 - `ScrollMemory` records the scroll offset per route in sessionStorage, so
   returning from a case study lands you where you left off rather than at the
   top.

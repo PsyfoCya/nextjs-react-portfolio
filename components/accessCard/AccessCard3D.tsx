@@ -13,7 +13,9 @@ import {
   type RapierRigidBody,
 } from "@react-three/rapier";
 import * as THREE from "three";
-import { createBadgeTexture } from "./badgeFace";
+import { createCardTexture } from "./cardFace";
+import CardSkeleton from "./CardSkeleton";
+import StaticCard from "./StaticCard";
 import { LanyardStrap } from "./lanyardStrap";
 
 /**
@@ -134,7 +136,7 @@ const Band = ({ texture, minSpeed = 6, maxSpeed = 24 }: BandProps) => {
     }
 
     // Catch up faster the further behind the rope has fallen, so a hard fling
-    // stays attached while a resting badge settles smoothly.
+    // stays attached while a resting card settles smoothly.
     const chase = (target: THREE.Vector3, x: number, y: number, z: number) => {
       ropeTarget.set(x, y, z);
       const distance = Math.max(
@@ -200,7 +202,7 @@ const Band = ({ texture, minSpeed = 6, maxSpeed = 24 }: BandProps) => {
             key={index}
             ref={ref}
             // Strung straight down rather than out to the side: this canvas is
-            // a narrow gutter column, so a horizontal start throws the badge
+            // a narrow gutter column, so a horizontal start throws the card
             // clean out of frame before gravity brings it back.
             position={[0.15 * (index + 1), -1 * (index + 1), 0]}
             angularDamping={2}
@@ -285,7 +287,7 @@ const Band = ({ texture, minSpeed = 6, maxSpeed = 24 }: BandProps) => {
   );
 };
 
-export interface Badge3DProps {
+export interface AccessCard3DProps {
   name?: string;
   title?: string;
   meta?: string;
@@ -293,33 +295,42 @@ export interface Badge3DProps {
   /**
    * When false the canvas stops rendering and the physics world stops
    * stepping. The scene is otherwise live from mount to unmount, so scrolling
-   * past the badge left a WebGL context and a rigid-body simulation running at
+   * past the card left a WebGL context and a rigid-body simulation running at
    * 60fps for the rest of the visit.
    */
   running?: boolean;
 }
 
-const Badge3D = ({
+const AccessCard3D = ({
   name = "Siyabonga Hadebe",
   title = "Frontend Developer",
   meta = "JOHANNESBURG · ZA",
-  photoUrl = "/assets/images/me/psyfo-badge.png",
+  photoUrl = "/assets/images/me/psyfo-access-card.png",
   running = true,
-}: Badge3DProps) => {
+}: AccessCard3DProps) => {
   const [texture, setTexture] = useState<THREE.Texture | null>(null);
+  const [failed, setFailed] = useState(false);
 
   useEffect(() => {
     let stale = false;
     let created: THREE.Texture | null = null;
 
-    createBadgeTexture({ name, title, meta, photoUrl }).then((result) => {
-      created = result;
-      if (stale) {
-        result.dispose();
-        return;
-      }
-      setTexture(result);
-    });
+    createCardTexture({ name, title, meta, photoUrl })
+      .then((result) => {
+        created = result;
+        if (stale) {
+          result.dispose();
+          return;
+        }
+        setTexture(result);
+      })
+      .catch((error) => {
+        // Without this the rejection is unhandled and `texture` stays null
+        // forever, so the stage renders an empty box with no clue why.
+        // eslint-disable-next-line no-console
+        console.error("Access card texture failed to paint:", error);
+        if (!stale) setFailed(true);
+      });
 
     return () => {
       stale = true;
@@ -327,8 +338,11 @@ const Badge3D = ({
     };
   }, [name, title, meta, photoUrl]);
 
-  // Nothing to render until the face is painted; the wrapper shows a skeleton.
-  if (!texture) return null;
+  // The face is painted to a canvas before the scene can use it. Hold the
+  // skeleton until it lands rather than returning null, which would leave a
+  // blank hole where the card should be.
+  if (failed) return <StaticCard />;
+  if (!texture) return <CardSkeleton />;
 
   return (
     <Canvas
@@ -336,9 +350,11 @@ const Badge3D = ({
       // Uncapped DPR on a 3x phone or a 5K display renders nine times the
       // pixels for no visible gain and drains battery.
       dpr={[1, 1.75]}
-      // "never" halts the render loop outright; the scene resumes exactly where
-      // it left off when the badge scrolls back in.
-      frameloop={running ? "always" : "never"}
+      // "demand" rather than "never" when paused: "never" renders nothing at
+      // all, so a canvas that mounted while off screen would stay blank until
+      // something scrolled it back. "demand" still draws the frame it is asked
+      // for and then stops, which is what we actually want.
+      frameloop={running ? "always" : "demand"}
       gl={{ alpha: true, antialias: true }}
     >
       <ambientLight intensity={Math.PI} />
@@ -379,4 +395,4 @@ const Badge3D = ({
   );
 };
 
-export default Badge3D;
+export default AccessCard3D;

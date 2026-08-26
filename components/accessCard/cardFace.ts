@@ -4,7 +4,7 @@ import * as THREE from "three";
 const WIDTH = 512;
 const HEIGHT = 720;
 
-export interface BadgeFaceOptions {
+export interface CardFaceOptions {
   name: string;
   title: string;
   meta: string;
@@ -39,25 +39,25 @@ const loadImage = (src: string): Promise<HTMLImageElement | null> =>
     const image = new Image();
     image.crossOrigin = "anonymous";
     image.onload = () => resolve(image);
-    // A missing portrait should cost us the photo, not the whole badge.
+    // A missing portrait should cost us the photo, not the whole card.
     image.onerror = () => resolve(null);
     image.src = src;
   });
 
 /**
- * Paints the badge artwork onto a 2D canvas and hands back a texture.
+ * Paints the access card artwork onto a 2D canvas and hands back a texture.
  *
- * Drawing the face ourselves keeps the whole badge dependency-free: the
+ * Drawing the face ourselves keeps the whole card dependency-free: the
  * obvious alternative, drei's <Text>, drags in troika-three-text and fetches a
  * default font from Google's CDN at runtime. A canvas costs one texture upload
  * and renders the site's own typography, which is already loaded by next/font.
  */
-export const createBadgeTexture = async ({
+export const createCardTexture = async ({
   name,
   title,
   meta,
   photoUrl,
-}: BadgeFaceOptions): Promise<THREE.CanvasTexture> => {
+}: CardFaceOptions): Promise<THREE.CanvasTexture> => {
   const canvas = document.createElement("canvas");
   canvas.width = WIDTH;
   canvas.height = HEIGHT;

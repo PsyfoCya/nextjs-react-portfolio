@@ -5,12 +5,12 @@ import * as THREE from "three";
  *
  * This replaces the `meshline` dependency the original PR used. MeshLine
  * extrudes its ribbon in *screen* space and corrects for the canvas aspect
- * ratio inside its vertex shader; in this badge's narrow gutter canvas
+ * ratio inside its vertex shader; in this card's narrow canvas
  * (320 x 684, aspect 0.47) that correction skewed the strap into a diagonal
  * slab that pointed nowhere near the card, even though the curve feeding it
  * was a clean vertical line.
  *
- * The badge is viewed essentially head-on, so the strap can simply be built in
+ * The card is viewed essentially head-on, so the strap can simply be built in
  * the XY plane: offset each point along the normal of its own tangent. No
  * shader maths, no aspect ratio, and one geometry allocated for the lifetime
  * of the component rather than one per frame.
@@ -73,7 +73,7 @@ export class LanyardStrap {
 
     // Fixed and deliberately generous, covering anywhere the strap can swing.
     // Recomputing it per frame only ever fed frustum culling for an object that
-    // is on screen whenever the badge is.
+    // is on screen whenever the card is.
     this.geometry.boundingSphere = new THREE.Sphere(
       new THREE.Vector3(0, 0, 0),
       12

@@ -1,6 +1,6 @@
 import ScrollMemory from "@/components/layout/ScrollMemory";
 import About from "@/sections/About";
-import Badge from "@/sections/Badge";
+import AccessCard from "@/sections/AccessCard";
 import Contact from "@/sections/Contact";
 import Featured from "@/sections/Featured";
 import Hobbies from "@/sections/Hobbies";
@@ -35,8 +35,8 @@ export default function Home() {
       <section id="about">
         <About />
       </section>
-      <section id="badge">
-        <Badge />
+      <section id="access-card">
+        <AccessCard />
       </section>
       <section id="hobbies">
         <Hobbies />

@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -16,10 +15,11 @@ const PAGINATION = { clickable: true } as const;
 const AUTOPLAY = { delay: 2500, disableOnInteraction: false } as const;
 
 const Gallery = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
   // Autoplay used to advance every 2.5s from mount to unmount, laying out and
   // painting slides nobody was looking at.
-  const inView = useInViewport(containerRef, { rootMargin: "200px" });
+  const { ref: containerRef, inView } = useInViewport<HTMLDivElement>({
+    rootMargin: "200px",
+  });
 
   return (
     <div

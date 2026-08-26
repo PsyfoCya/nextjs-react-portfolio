@@ -1,6 +1,6 @@
 "use client";
 
-import { RefObject, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface Options {
   /** Grows the trigger area, so work can start just before it scrolls in. */
@@ -9,22 +9,39 @@ interface Options {
   once?: boolean;
 }
 
+interface InViewport<T extends Element> {
+  /** Attach to the element to watch. */
+  ref: (node: T | null) => void;
+  /** The attached element, for callers that also need to drive it. */
+  node: T | null;
+  inView: boolean;
+}
+
 /**
  * Reports whether an element is currently on screen.
  *
- * The page has several things that should not run while nobody can see them —
- * a physics simulation, a carousel's autoplay, video playback. Each of them
- * previously ran from mount until unmount regardless.
+ * Several things on this page should not run while nobody can see them — a
+ * physics simulation, a carousel's autoplay, video playback.
+ *
+ * The element is held in state behind a callback ref rather than read out of a
+ * `RefObject`. With a ref object the observer effect can only run on mount: if
+ * the element is mounted conditionally — as the access card is, behind a media
+ * query that resolves to `false` on the first render — the effect sees `null`,
+ * bails, and never runs again, because the ref's identity never changes. The
+ * card would sit on its skeleton forever. A callback ref fires when the node
+ * actually attaches, so the observer starts then.
  */
-export function useInViewport<T extends Element>(
-  ref: RefObject<T>,
-  { rootMargin = "0px", once = false }: Options = {}
-): boolean {
+export function useInViewport<T extends Element>({
+  rootMargin = "0px",
+  once = false,
+}: Options = {}): InViewport<T> {
+  const [node, setNode] = useState<T | null>(null);
   const [inView, setInView] = useState(false);
 
+  const ref = useCallback((next: T | null) => setNode(next), []);
+
   useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
+    if (!node) return;
 
     // Without IntersectionObserver, treat everything as visible: degrading to
     // "always on" matches the old behaviour rather than hiding content.
@@ -44,11 +61,11 @@ export function useInViewport<T extends Element>(
       { rootMargin }
     );
 
-    observer.observe(element);
+    observer.observe(node);
     return () => observer.disconnect();
-  }, [ref, rootMargin, once]);
+  }, [node, rootMargin, once]);
 
-  return inView;
+  return { ref, node, inView };
 }
 
 export default useInViewport;

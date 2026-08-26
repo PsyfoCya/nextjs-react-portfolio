@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useInViewport } from "@/lib/useInViewport";
 
 interface VideoProps {
@@ -19,14 +19,14 @@ interface VideoProps {
  * every one of them was below the fold.
  */
 const Video = ({ video, active, title }: VideoProps) => {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const nearViewport = useInViewport(videoRef, {
-    rootMargin: "300px",
-    once: true,
-  });
+  const {
+    ref: videoRef,
+    node: videoElement,
+    inView: nearViewport,
+  } = useInViewport<HTMLVideoElement>({ rootMargin: "300px", once: true });
 
   useEffect(() => {
-    const element = videoRef.current;
+    const element = videoElement;
     if (!element || !nearViewport) return;
 
     if (active) {
@@ -36,7 +36,7 @@ const Video = ({ video, active, title }: VideoProps) => {
       element.pause();
       element.currentTime = 0;
     }
-  }, [active, nearViewport]);
+  }, [active, nearViewport, videoElement]);
 
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 rounded-3xl">
