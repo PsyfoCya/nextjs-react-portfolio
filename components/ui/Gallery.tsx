@@ -24,7 +24,9 @@ const Gallery = () => {
   return (
     <div
       ref={containerRef}
-      className="h-[550px] sm:h-[650px] md:h-full 2xl:h-[750px] w-full"
+      // An aspect ratio rather than three magic pixel heights, one of which
+      // (`md:h-full`) resolved against an auto-height parent and did nothing.
+      className="h-full min-h-[22rem] w-full overflow-hidden rounded-xl"
     >
       <Swiper
         modules={MODULES}

@@ -94,18 +94,34 @@ const ScrollMemory = () => {
       requestAnimationFrame(restore);
     }
 
-    let queued = false;
+    /*
+      Debounced, not coalesced into a frame. `sessionStorage.setItem` is a
+      synchronous, disk-backed, main-thread call, and the previous rAF version
+      made roughly sixty of them a second for the whole duration of any scroll.
+      Where you left off does not need that resolution.
+    */
+    let timer: ReturnType<typeof setTimeout> | null = null;
     const onScroll = () => {
-      if (queued) return;
-      queued = true;
-      requestAnimationFrame(() => {
-        queued = false;
+      if (timer !== null) clearTimeout(timer);
+      timer = setTimeout(() => {
+        timer = null;
         write(window.scrollY);
-      });
+      }, 150);
+    };
+
+    // A tab closed or backgrounded mid-scroll would otherwise lose the last
+    // 150ms of movement.
+    const onHide = () => {
+      if (document.visibilityState === "hidden") write(window.scrollY);
     };
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    cleanups.push(() => window.removeEventListener("scroll", onScroll));
+    document.addEventListener("visibilitychange", onHide);
+    cleanups.push(() => {
+      if (timer !== null) clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("visibilitychange", onHide);
+    });
 
     return () => cleanups.forEach((cleanup) => cleanup());
   }, [pathname]);

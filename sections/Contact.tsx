@@ -3,7 +3,6 @@
 import ContactCard from "@/components/card/ContactCard";
 import Heading from "@/components/heading/Heading";
 import Button from "@/components/ui/Button";
-import Card from "@/components/ui/Card";
 import Input from "@/components/ui/Input";
 import TextArea from "@/components/ui/TextArea";
 import { FaProjectDiagram } from "react-icons/fa";
@@ -21,12 +20,17 @@ const Contact = () => {
   return (
     <Section>
       <Heading
-        number="05"
+        number="06"
         title_1="Contact"
         title_2="Me"
         svgText="EMAIL IS THE FASTEST WAY TO REACH ME"
       />
-      <Card>
+      {/*
+        A plain container, not a Card. It used to carry a ring of its own,
+        which framed the three inner rings and — via `:focus-within` — lit the
+        entire section for as long as anyone was typing in a field.
+      */}
+      <div className="py-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Contact Cards */}
           <div className="flex flex-col gap-8">
@@ -50,9 +54,9 @@ const Contact = () => {
           <form
             ref={formRef}
             onSubmit={sendEmail}
-            className="lg:col-span-2 !bg-secondary-background border border-border rounded-lg space-y-6 relative overflow-hidden py-5 px-[25px] shadow-md"
+            className="gradient-ring relative space-y-6 rounded-lg px-[25px] py-5 shadow-md lg:col-span-2"
           >
-            <div className="flex flex-col lg:flex-row item-center justify-between mb-4 gap-8">
+            <div className="flex flex-col lg:flex-row items-center justify-between mb-4 gap-8">
               <Input
                 name="name"
                 type="text"
@@ -72,7 +76,7 @@ const Contact = () => {
                 disabled={isSending}
               />
             </div>
-            <div className="flex item-center justify-between mb-4 gap-8">
+            <div className="flex items-center justify-between mb-4 gap-8">
               <Input
                 name="subject"
                 type="text"
@@ -130,7 +134,7 @@ const Contact = () => {
             </div>
           </form>
         </div>
-      </Card>
+      </div>
     </Section>
   );
 };

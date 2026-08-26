@@ -5,6 +5,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Cursor from "@/components/cursor/Cursor";
 import Motion from "@/components/visualEffects/Motion";
+import Boot from "@/components/loading/Boot";
 
 // Fonts
 const MainFont = Bricolage_Grotesque({ subsets: ["latin"] });
@@ -64,7 +65,8 @@ export default function RootLayout({
         )}
       >
         <Motion>
-          <Cursor color="var(--signature-1)" />
+          <Boot />
+          <Cursor color="red" />
           {children}
         </Motion>
       </body>

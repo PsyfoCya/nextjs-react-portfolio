@@ -1,10 +1,11 @@
 import AccessCardStage from "@/components/accessCard/AccessCardStage";
+import Heading from "@/components/heading/Heading";
 import Section from "@/components/ui/Section";
 
 /**
  * The easter egg.
  *
- * The access card used to be layered over the hero in a 17rem gutter, where it
+ * The card used to be layered over the hero in a 17rem gutter, where it
  * competed with the headline for both attention and bandwidth — three.js and
  * rapier's wasm were being fetched while the first screen was still painting.
  *
@@ -14,16 +15,25 @@ import Section from "@/components/ui/Section";
  */
 const AccessCard = () => (
   <Section>
-    <div className="flex flex-col items-center gap-2 pt-8 text-center">
-      <p className="font-pixel text-sm uppercase tracking-wide text-secondary-foreground">
-        You found it
-      </p>
-      <h2 className="font-oswald text-4xl uppercase leading-[105%] text-primary-foreground lg:text-6xl">
-        The <span className="italic">access card</span>
-      </h2>
-    </div>
+    {/*
+      Uses the same Heading as every other section. It used to hand-roll its
+      own centred title, so it had no number in the sequence, no ghost numeral
+      and no curve divider — the one section that broke the pattern.
+    */}
+    <Heading
+      number="04"
+      title_1="Access"
+      title_2="Card"
+      svgText="DRAG IT, FLING IT, LET IT SETTLE"
+    />
 
-    <AccessCardStage />
+    {/*
+      Flush against the heading, with no padding between them: the strap is
+      meant to read as hanging out of the title itself.
+    */}
+    <div className="-mt-6">
+      <AccessCardStage />
+    </div>
   </Section>
 );
 

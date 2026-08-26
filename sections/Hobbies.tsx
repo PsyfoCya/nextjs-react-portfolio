@@ -9,7 +9,7 @@ const Hobbies = () => {
   return (
     <Section>
       <Heading
-        number="04"
+        number="05"
         title_1="Off"
         title_2="Duty"
         svgText="THIS SECTION IS STILL BEING WRITTEN"

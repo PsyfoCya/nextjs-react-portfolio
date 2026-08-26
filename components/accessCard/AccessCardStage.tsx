@@ -74,7 +74,7 @@ const AccessCardStage = () => {
       ref={stageRef}
       className={
         interactive
-          ? "relative mx-auto h-[70vh] min-h-[32rem] w-full max-w-4xl"
+          ? "relative mx-auto h-[68vh] min-h-[34rem] w-full max-w-3xl"
           : "flex min-h-[24rem] items-center justify-center py-12"
       }
       onPointerDown={() => setTouched(true)}

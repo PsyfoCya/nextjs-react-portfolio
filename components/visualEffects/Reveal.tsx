@@ -20,17 +20,25 @@ const STAGGER = 0.06;
 const MAX_STAGGER_STEPS = 5;
 
 /**
- * Fades and lifts its children the first time they scroll into view.
+ * Lifts its children the first time they scroll into view.
  *
- * `once: true` matters: re-animating on the way back up turns a scroll through
- * the page into a flicker. `MotionConfig reducedMotion="user"` in the root
- * layout strips the movement for anyone who has asked for that.
+ * Deliberately does NOT animate opacity. framer-motion serialises `initial`
+ * into the server-rendered markup, so `initial={{ opacity: 0 }}` shipped the
+ * whole About grid and every case-study card as invisible HTML that stayed
+ * invisible until hydration — which is both where the "pop in" came from and
+ * why the page felt slow, and it disqualified all of that content as an LCP
+ * candidate. Transform-only keeps the text readable in the HTML, and moves on
+ * the compositor rather than repainting.
+ *
+ * `once: true` matters too: re-animating on the way back up turns a scroll
+ * through the page into a flicker. `MotionConfig reducedMotion="user"` in the
+ * root layout strips the movement for anyone who has asked for that.
  */
 const Reveal = ({ children, className, index = 0 }: RevealProps) => (
   <motion.div
     className={cn(className)}
-    initial={{ opacity: 0, y: DISTANCE }}
-    whileInView={{ opacity: 1, y: 0 }}
+    initial={{ y: DISTANCE }}
+    whileInView={{ y: 0 }}
     viewport={{ once: true, margin: "-8%" }}
     transition={{
       duration: DURATION,

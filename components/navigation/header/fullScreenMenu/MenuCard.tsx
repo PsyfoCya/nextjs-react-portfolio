@@ -41,6 +41,7 @@ const MenuCard = ({ closeMenu }: MenuCardProps) => {
         src={shadeImg}
         alt=""
         aria-hidden
+        sizes="(max-width: 1024px) 100vw, 500px"
         className="w-full h-full mix-blend-overlay absolute top-0 right-0 left-0 bottom-0"
       />
     </div>

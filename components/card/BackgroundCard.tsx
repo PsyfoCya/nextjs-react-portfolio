@@ -2,7 +2,7 @@ import Card from "../ui/Card";
 
 const BackgroundCard = () => {
   return (
-    <Card className="md:h-full">
+    <Card title="My Background" fill>
       <div>
         <p className="leading-[170%] font-normal text-white/[0.4] text-[16px]">
           I was born in{" "}

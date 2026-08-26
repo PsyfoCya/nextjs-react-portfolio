@@ -5,16 +5,23 @@ import { cn } from "@/lib/utils";
 
 const MeCard = () => {
   return (
-    <Card className="md:h-full 2xl:h-full">
-      <div className="w-full h-[400px] sm:h-[500px] overflow-hidden">
-        {/* Background Image */}
+    <Card title="Me" fill>
+      {/*
+        `relative` matters. The portrait is `absolute inset-0`, and without a
+        positioned ancestor here its nearest one was the Card itself — so it
+        escaped this box and covered the title too.
+      */}
+      <div className="relative min-h-0 w-full flex-1 overflow-hidden rounded-xl">
         <Image
           src={portrait}
           alt="Siyabonga Hadebe"
-          className="absolute top-0 left-0 bottom-0 right-0 h-full w-full object-cover"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1400px) 50vw, 33vw"
+          placeholder="blur"
+          className="object-cover"
         />
-        {/* tags */}
-        <div className="absolute top-[62%] space-y-2 ">
+
+        <div className="absolute bottom-4 left-0 space-y-2">
           <Tag
             text="Hello, World! 👋"
             className="rounded-tl-2xl rounded-br-2xl rounded-bl-2xl"
@@ -33,17 +40,16 @@ const MeCard = () => {
           />
         </div>
       </div>
-      <div className="h-[2.4rem]"></div>
     </Card>
   );
 };
 
 export default MeCard;
 
-const Tag = ({ text, className }: { text: string; className: string }) => {
+const Tag = ({ text, className }: { text: string; className?: string }) => {
   return (
-    <div className={cn("bg-black/[0.7] w-fit py-1.5 px-3", className)}>
-      <p className="text-primary-foreground leading-[110%] font-bold">{text}</p>
+    <div className={cn("w-fit bg-black/[0.7] px-3 py-1.5", className)}>
+      <p className="font-bold leading-[110%] text-primary-foreground">{text}</p>
     </div>
   );
 };
