@@ -2,7 +2,8 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useInViewport } from "@/lib/useInViewport";
 
 /**
  * Only pulled in once the media queries below actually pass, so phones never
@@ -75,17 +76,21 @@ const BadgeStage = () => {
   const isWideEnough = useMediaQuery("(min-width: 1280px)");
   const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
+  const stageRef = useRef<HTMLDivElement>(null);
+  const inView = useInViewport(stageRef, { rootMargin: "100px" });
+
   // Pointer-events are enabled only on the canvas itself, so the badge can be
   // dragged without the container swallowing clicks meant for the headline.
   if (!isWideEnough) return null;
 
   return (
     <div
+      ref={stageRef}
       className="pointer-events-none absolute right-[2vw] top-24 z-20 h-[76vh] w-[17rem] 2xl:right-[4vw] 2xl:w-[20rem]"
       aria-hidden
     >
       <div className="pointer-events-auto h-full w-full">
-        {prefersReducedMotion ? <StaticBadge /> : <Badge3D />}
+        {prefersReducedMotion ? <StaticBadge /> : <Badge3D running={inView} />}
       </div>
     </div>
   );

@@ -50,13 +50,31 @@ export class LanyardStrap {
       uvs[i * 4 + 3] = v;
     }
 
+    // The ribbon is built in the XY plane and viewed head-on, so every vertex
+    // normal is +Z. Writing them once here means `update` does not have to call
+    // `computeVertexNormals()` — which walked all 66 vertices and every face,
+    // sixty times a second, to arrive at this same answer.
+    const normals = new Float32Array(vertexCount * 3);
+    for (let i = 0; i < vertexCount; i += 1) {
+      normals[i * 3 + 2] = 1;
+    }
+
     this.geometry = new THREE.BufferGeometry();
     this.geometry.setAttribute(
       "position",
       new THREE.BufferAttribute(this.positions, 3)
     );
+    this.geometry.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
     this.geometry.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
     this.geometry.setIndex(indices);
+
+    // Fixed and deliberately generous, covering anywhere the strap can swing.
+    // Recomputing it per frame only ever fed frustum culling for an object that
+    // is on screen whenever the badge is.
+    this.geometry.boundingSphere = new THREE.Sphere(
+      new THREE.Vector3(0, 0, 0),
+      12
+    );
   }
 
   /** Rewrites the ribbon in place from the current curve. */
@@ -94,9 +112,9 @@ export class LanyardStrap {
       this.positions[offset + 5] = point.z;
     }
 
+    // Normals and bounds are fixed (see the constructor), so the only thing
+    // that changes per frame is the position buffer.
     this.geometry.attributes.position.needsUpdate = true;
-    this.geometry.computeVertexNormals();
-    this.geometry.computeBoundingSphere();
   }
 
   dispose(): void {

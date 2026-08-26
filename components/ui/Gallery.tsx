@@ -1,21 +1,35 @@
 "use client";
 
+import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
-import { galleryImages } from "@/data/Gallery";
 import Image from "next/image";
+import { galleryImages } from "@/data/Gallery";
+import { useInViewport } from "@/lib/useInViewport";
+
+// Hoisted: Swiper reads these on every render, and rebuilding them each time
+// hands it a new config object for no reason.
+const MODULES = [Pagination, Autoplay];
+const PAGINATION = { clickable: true } as const;
+const AUTOPLAY = { delay: 2500, disableOnInteraction: false } as const;
 
 const Gallery = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  // Autoplay used to advance every 2.5s from mount to unmount, laying out and
+  // painting slides nobody was looking at.
+  const inView = useInViewport(containerRef, { rootMargin: "200px" });
+
   return (
-    <div className="h-[550px] sm:h-[650px] md:h-full 2xl:h-[750px] w-full">
+    <div
+      ref={containerRef}
+      className="h-[550px] sm:h-[650px] md:h-full 2xl:h-[750px] w-full"
+    >
       <Swiper
-        modules={[Pagination, Autoplay]}
-        pagination={{
-          clickable: true,
-        }}
-        autoplay={{ delay: 2500, disableOnInteraction: false }}
+        modules={MODULES}
+        pagination={PAGINATION}
+        autoplay={inView ? AUTOPLAY : false}
         className="mySwiper rounded-2xl"
       >
         {galleryImages.map((img, index) => (

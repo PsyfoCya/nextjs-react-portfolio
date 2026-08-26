@@ -262,6 +262,13 @@ export interface Badge3DProps {
   title?: string;
   meta?: string;
   photoUrl?: string;
+  /**
+   * When false the canvas stops rendering and the physics world stops
+   * stepping. The scene is otherwise live from mount to unmount, so scrolling
+   * past the badge left a WebGL context and a rigid-body simulation running at
+   * 60fps for the rest of the visit.
+   */
+  running?: boolean;
 }
 
 const Badge3D = ({
@@ -269,6 +276,7 @@ const Badge3D = ({
   title = "Frontend Developer",
   meta = "JOHANNESBURG · ZA",
   photoUrl = "/assets/images/me/psyfo-badge.png",
+  running = true,
 }: Badge3DProps) => {
   const [texture, setTexture] = useState<THREE.Texture | null>(null);
 
@@ -300,10 +308,13 @@ const Badge3D = ({
       // Uncapped DPR on a 3x phone or a 5K display renders nine times the
       // pixels for no visible gain and drains battery.
       dpr={[1, 1.75]}
+      // "never" halts the render loop outright; the scene resumes exactly where
+      // it left off when the badge scrolls back in.
+      frameloop={running ? "always" : "never"}
       gl={{ alpha: true, antialias: true }}
     >
       <ambientLight intensity={Math.PI} />
-      <Physics gravity={[0, -40, 0]} timeStep={1 / 60}>
+      <Physics gravity={[0, -40, 0]} timeStep={1 / 60} paused={!running}>
         <Band texture={texture} />
       </Physics>
       <Environment blur={0.75}>

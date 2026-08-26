@@ -1,4 +1,17 @@
-import moment from "moment-timezone";
+/**
+ * `Intl` rather than moment-timezone. The browser already carries the IANA
+ * database, so stamping one timestamp did not justify a 3MB dependency in the
+ * client bundle.
+ */
+const sentAtFormatter = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Africa/Johannesburg",
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: false,
+});
 
 /**
  * EmailJS wiring for the contact form.
@@ -74,7 +87,7 @@ export const toTemplateParams = (fields: ContactFields) => ({
 
   // The stock EmailJS template prints a {{time}} line under the sender's
   // name. It is not a variable EmailJS fills in — unsent, it renders blank.
-  time: moment().tz("Africa/Johannesburg").format("D MMM YYYY, HH:mm"),
+  time: sentAtFormatter.format(new Date()),
 
   to_name: "Siyabonga",
 });

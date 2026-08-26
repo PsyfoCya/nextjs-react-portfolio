@@ -53,12 +53,12 @@ const Landing = () => {
       {/* Contact + clock, stacked under the headline on small devices */}
       <div className="relative z-30 mt-16 flex flex-col items-center gap-4 md:hidden">
         <ContactCta />
-        <LiveClock timeZone="Johannesburg" />
+        <LiveClock timeZone="Africa/Johannesburg" />
       </div>
 
       {/* Live Clock for larger devices */}
       <div className="hidden md:block absolute right-10 bottom-10">
-        <LiveClock timeZone="Johannesburg" />
+        <LiveClock timeZone="Africa/Johannesburg" />
       </div>
     </div>
   );
