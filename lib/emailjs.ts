@@ -1,21 +1,39 @@
+import moment from "moment-timezone";
+
 /**
  * EmailJS wiring for the contact form.
  *
- * All three values are public by design — EmailJS identifies the account with
- * a *public* key and the send happens straight from the browser, so there is
- * no secret to leak here. They stay overridable via env vars so the IDs can be
- * rotated on Netlify without a code change, and fall back to the values the
- * site already shipped with so an unconfigured deploy keeps working.
+ * The IDs come from the environment and nothing is hard-coded, so rotating the
+ * EmailJS account is a Vercel settings change rather than a commit, and the
+ * repo carries no account identifiers.
  *
- * Because anyone can read these out of the bundle, abuse is prevented on the
- * EmailJS side rather than in this file: see the dashboard checklist in
- * README.md (domain allowlist + rate limiting).
+ * Note what this does *not* buy: `NEXT_PUBLIC_*` values are inlined into the
+ * client bundle at build time, and the send happens in the browser, so all
+ * three are still readable by anyone who opens devtools. EmailJS is designed
+ * that way — the key it calls "public" is public — so abuse is prevented in
+ * the dashboard, not here: see the checklist in README.md (domain allowlist +
+ * rate limiting). Never put an EmailJS *private* key in a NEXT_PUBLIC_ var.
+ *
+ * Each variable is read as a whole `process.env.X` expression because that is
+ * the literal Next.js substitutes at build time; destructuring `process.env`
+ * or looking a name up dynamically yields `undefined` in the browser.
  */
-export const emailjsConfig = {
-  serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? "service_ekwydfj",
-  templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "template_j7rrh0n",
-  publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "QGhpJXJQYGvV8ZiUL",
-};
+export interface EmailjsConfig {
+  serviceId: string;
+  templateId: string;
+  publicKey: string;
+}
+
+/** `null` when any of the three variables is missing or empty. */
+export const emailjsConfig: EmailjsConfig | null = (() => {
+  const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+  const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+  const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+
+  if (!serviceId || !templateId || !publicKey) return null;
+
+  return { serviceId, templateId, publicKey };
+})();
 
 export interface ContactFields {
   name: string;
@@ -53,6 +71,10 @@ export const toTemplateParams = (fields: ContactFields) => ({
   user_email: fields.email,
   user_subject: fields.subject,
   user_message: fields.message,
+
+  // The stock EmailJS template prints a {{time}} line under the sender's
+  // name. It is not a variable EmailJS fills in — unsent, it renders blank.
+  time: moment().tz("Africa/Johannesburg").format("D MMM YYYY, HH:mm"),
 
   to_name: "Siyabonga",
 });

@@ -31,11 +31,25 @@ Adding a case study means adding an object, not a page.
 ## Contact form (EmailJS)
 
 The form posts straight from the browser via `@emailjs/browser`. The service,
-template and public key live in `lib/emailjs.ts` and can be overridden with
+template and public key are read from the environment by `lib/emailjs.ts` and
+nothing is hard-coded: copy `.env.example` to `.env.local` and fill in
 `NEXT_PUBLIC_EMAILJS_SERVICE_ID`, `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID` and
-`NEXT_PUBLIC_EMAILJS_PUBLIC_KEY`. All three are public by design — EmailJS
-identifies the account with a *public* key — so there is no secret in the
-bundle, and abuse is prevented in the dashboard rather than in the code.
+`NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` from the dashboard. Set the same three in
+Vercel → Project → Settings → Environment Variables (all three environments);
+a build without them leaves the form reporting "Contact form is not
+configured" rather than failing opaquely mid-send.
+
+`NEXT_PUBLIC_*` is inlined at build time, so changing a value in the Vercel UI
+only takes effect on the next deploy — and on a redeploy, with the build cache
+disabled.
+
+Keeping them in the environment means the account can be rotated without a
+commit — it does not hide them. `NEXT_PUBLIC_*` values are inlined into the
+client bundle at build time and the send happens in the browser, so all three
+are readable from devtools on the deployed site. That is how EmailJS is meant
+to work: the key it calls "public" is public, and abuse is prevented in the
+dashboard rather than in the code. An EmailJS *private* key must never go in a
+`NEXT_PUBLIC_` variable.
 
 If a submission reports an error, the message now shows the HTTP status and
 EmailJS' own text (the previous version discarded the error object, so every
