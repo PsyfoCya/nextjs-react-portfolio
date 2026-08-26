@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface InputProps {
   icon?: ReactNode;
@@ -11,7 +11,7 @@ interface InputProps {
   autoComplete?: string;
 }
 
-const Input: FC<InputProps> = ({
+const Input = ({
   icon,
   placeholder,
   type,
@@ -19,7 +19,7 @@ const Input: FC<InputProps> = ({
   required,
   disabled,
   autoComplete,
-}) => {
+}: InputProps) => {
   return (
     <div className="relative w-full">
       {/* Icon */}

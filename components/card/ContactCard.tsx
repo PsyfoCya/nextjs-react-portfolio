@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import Button from "../ui/Button";
+import ExternalLink from "../ui/ExternalLink";
 
 interface ContactCardProps {
   title: string;
@@ -11,15 +11,13 @@ interface ContactCardProps {
   href: string;
 }
 
-const ContactCard: FC<ContactCardProps> = ({
+const ContactCard = ({
   title,
   icon,
   text,
   btnText,
   href,
-}) => {
-  const isExternal = href.startsWith("http");
-
+}: ContactCardProps) => {
   return (
     <div className="bg-secondary-background border border-border rounded-lg relative overflow-hidden py-5 px-[25px] shadow-md">
       <div className="z-20 flex flex-col gap-8 justify-between items-start">
@@ -33,14 +31,9 @@ const ContactCard: FC<ContactCardProps> = ({
         <div>
           <h2 className="font-bold text-xl sm:text-2xl break-words">{text}</h2>
         </div>
-        <Link
-          href={href}
-          target={isExternal ? "_blank" : undefined}
-          rel={isExternal ? "noopener noreferrer" : undefined}
-          className="link"
-        >
+        <ExternalLink href={href} className="link">
           <Button className="w-24">{btnText}</Button>
-        </Link>
+        </ExternalLink>
       </div>
     </div>
   );

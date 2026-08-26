@@ -31,7 +31,10 @@ export class LanyardStrap {
 
     const vertexCount = (segments + 1) * 2;
     this.positions = new Float32Array(vertexCount * 3);
-    this.samples = Array.from({ length: segments + 1 }, () => new THREE.Vector3());
+    this.samples = Array.from(
+      { length: segments + 1 },
+      () => new THREE.Vector3()
+    );
 
     // Two vertices per sample, stitched into a strip. The winding never
     // changes, so the index buffer is built once here.
@@ -83,13 +86,19 @@ export class LanyardStrap {
     // allocate a fresh array of 33 Vector3s on every single frame.
     const points = this.samples;
     for (let i = 0; i <= this.segments; i += 1) {
-      curve.getPoint(i / this.segments, points[i]);
+      const target = points[i];
+      if (target) curve.getPoint(i / this.segments, target);
     }
 
     for (let i = 0; i <= this.segments; i += 1) {
       const point = points[i];
       const previous = points[Math.max(i - 1, 0)];
       const next = points[Math.min(i + 1, this.segments)];
+
+      // `samples` is allocated once with exactly segments + 1 entries and every
+      // index above is clamped into range, so these are always present. The
+      // check satisfies the type system; the branch is never taken.
+      if (!point || !previous || !next) continue;
 
       this.tangent.subVectors(next, previous);
       // A degenerate segment (two coincident samples) would normalise to NaN
@@ -114,7 +123,8 @@ export class LanyardStrap {
 
     // Normals and bounds are fixed (see the constructor), so the only thing
     // that changes per frame is the position buffer.
-    this.geometry.attributes.position.needsUpdate = true;
+    const position = this.geometry.attributes.position;
+    if (position) position.needsUpdate = true;
   }
 
   dispose(): void {

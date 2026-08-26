@@ -7,7 +7,9 @@ export const metadata: Metadata = {
 
 const NotFound = () => (
   <main className="mx-auto flex min-h-screen w-full max-w-3xl flex-col justify-center gap-6 px-5 lg:px-8">
-    <p className="font-pixel text-lg uppercase text-secondary-foreground">404</p>
+    <p className="font-pixel text-lg uppercase text-secondary-foreground">
+      404
+    </p>
     <h1 className="font-oswald text-5xl leading-[105%] text-primary-foreground lg:text-7xl">
       Nothing <span className="italic">here</span>
     </h1>

@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 /** Tall enough to cover any viewport until the real height is measured. */
 const FALLBACK_HEIGHT = 1000;
 
-const bulge = (height: number) => `M100 0 L100 ${height} Q-100 ${height / 2} 100 0`;
-const flat = (height: number) => `M100 0 L100 ${height} Q100 ${height / 2} 100 0`;
+const bulge = (height: number) =>
+  `M100 0 L100 ${height} Q-100 ${height / 2} 100 0`;
+const flat = (height: number) =>
+  `M100 0 L100 ${height} Q100 ${height / 2} 100 0`;
 
 /**
  * The curved edge that sweeps in alongside the full-screen menu.

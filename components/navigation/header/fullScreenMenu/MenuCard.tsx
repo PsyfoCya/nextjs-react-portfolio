@@ -2,56 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FC, MouseEvent } from "react";
 import { HeadingAnimatedSvg } from "@/components/heading/HeadingAnimatedSVG";
 import shadeImg from "@/public/assets/images/background/polymophic-bg.jpg";
-import { isHashLink, scrollToHash } from "@/lib/utils";
-
-const myLinks = [
-  {
-    title: "CASE STUDIES",
-    link: "/work",
-  },
-  {
-    title: "BACKGROUND",
-    link: "#background",
-  },
-  {
-    title: "EXPERIENCE",
-    link: "#experience",
-  },
-  {
-    title: "EDUCATION",
-    link: "#education",
-  },
-  {
-    title: "CERTIFICATIONS",
-    link: "#certifications",
-  },
-  {
-    title: "TECH STACK",
-    link: "#stack",
-  },
-  {
-    title: "HOBBIES",
-    link: "#hobbies",
-  },
-];
+import { menuLinks } from "@/data/Links";
+import { useHashNavigation } from "@/lib/useHashNavigation";
 
 interface MenuCardProps {
   closeMenu: () => void;
 }
 
-const MenuCard: FC<MenuCardProps> = ({ closeMenu }) => {
-  const handleLinkClick = (
-    e: MouseEvent<HTMLAnchorElement>,
-    link: string
-  ) => {
-    closeMenu();
-    if (isHashLink(link) && scrollToHash(link)) {
-      e.preventDefault();
-    }
-  };
+const MenuCard = ({ closeMenu }: MenuCardProps) => {
+  const handleLinkClick = useHashNavigation(closeMenu);
 
   return (
     <div className="w-full h-auto min-h-[320px] lg:min-h-[427px] gap-8 lg:gap-[70px] bg-[#1e36ea] rounded-[10px] flex-col justify-between items-start flex relative overflow-hidden pt-6 lg:pt-10 px-[25px] pb-5 shadow-md">
@@ -64,7 +25,7 @@ const MenuCard: FC<MenuCardProps> = ({ closeMenu }) => {
       </div>
       {/* Menu */}
       <div className="z-40 w-full flex flex-col gap-y-[5px] justify-center items-start relative">
-        {myLinks.map((link) => (
+        {menuLinks.map((link) => (
           <Link
             key={link.title}
             href={link.link}

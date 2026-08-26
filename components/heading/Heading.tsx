@@ -1,4 +1,3 @@
-import { FC } from "react";
 import SVGCurve from "../visualEffects/SVGCurve";
 import { HeadingAnimatedSvg } from "./HeadingAnimatedSVG";
 
@@ -11,12 +10,12 @@ interface HeadingProps {
   svgText?: string;
 }
 
-const Heading: FC<HeadingProps> = ({
+const Heading = ({
   number,
   title_1,
   title_2,
   svgText = "LEARN MORE ABOUT MY PROJECTS",
-}) => {
+}: HeadingProps) => {
   return (
     <div className="relative my-10 px-4 sm:px-8 z-20">
       {/* Number */}

@@ -84,7 +84,13 @@ export const caseStudies: CaseStudy[] = [
       "Delivery boundaries are real-world shapes — they follow highways, avoid the river, stop at the township edge. A KML import and export pipeline moved defining them out of engineering and into the hands of the people who actually know where the lines fall.",
     role: "Feature owner — import/export pipeline, landmarks, serviceability checks",
     period: "Franchise back office",
-    stack: ["React", "TypeScript", "Next.js", "KML / geospatial", "TanStack Query"],
+    stack: [
+      "React",
+      "TypeScript",
+      "Next.js",
+      "KML / geospatial",
+      "TanStack Query",
+    ],
     featured: true,
     sections: [
       {
@@ -96,7 +102,9 @@ export const caseStudies: CaseStudy[] = [
       },
       {
         heading: "What I built",
-        body: ["A KML import and export pipeline for service areas. The workflow:"],
+        body: [
+          "A KML import and export pipeline for service areas. The workflow:",
+        ],
         steps: [
           "Franchisee opens Google Earth — a tool they already know, or can learn in ten minutes.",
           "Draws their delivery boundary as a polygon.",
@@ -144,7 +152,9 @@ export const caseStudies: CaseStudy[] = [
       },
       {
         heading: "What I built",
-        body: ["A shared SVG wrapper component that establishes that contract:"],
+        body: [
+          "A shared SVG wrapper component that establishes that contract:",
+        ],
         bullets: [
           "Standardises the viewBox to a 24×24 grid, with an escape hatch for icons legitimately authored on a different grid.",
           "A named size scale (6xs through 6xl) mapped to Tailwind utilities, so sizing is a prop and not a magic number.",
@@ -216,12 +226,18 @@ export const caseStudies: CaseStudy[] = [
     slug: "franchise-back-office",
     order: 5,
     title: "Franchise Back Office",
-    tagline: "The unglamorous side of the product, where the actual operations happen.",
+    tagline:
+      "The unglamorous side of the product, where the actual operations happen.",
     summary:
       "Store configuration, stock transfers, reporting surfaces, and the state-synchronisation debugging that comes with React Server Components — plus an N+1 in a list endpoint that was better fixed on the API than absorbed into the client.",
     role: "Feature development across the back office and the ordering app",
     period: "Franchise back office",
-    stack: ["Next.js", "React Server Components", "TypeScript", "TanStack Query"],
+    stack: [
+      "Next.js",
+      "React Server Components",
+      "TypeScript",
+      "TanStack Query",
+    ],
     featured: false,
     sections: [
       {
@@ -254,7 +270,13 @@ export const caseStudies: CaseStudy[] = [
   },
 ];
 
-export const featuredCaseStudies = caseStudies.filter((study) => study.featured);
+/** The three headline studies, and everything else. */
+export const featuredCaseStudies = caseStudies.filter(
+  (study) => study.featured
+);
+export const secondaryCaseStudies = caseStudies.filter(
+  (study) => !study.featured
+);
 
 export const getCaseStudy = (slug: string) =>
   caseStudies.find((study) => study.slug === slug);

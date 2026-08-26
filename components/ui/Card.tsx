@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface CardProps {
   title?: string;
@@ -7,7 +7,7 @@ interface CardProps {
   className?: string;
 }
 
-const Card: FC<CardProps> = ({ title, children, className }) => {
+const Card = ({ title, children, className }: CardProps) => {
   return (
     <div
       className={cn(
@@ -15,18 +15,17 @@ const Card: FC<CardProps> = ({ title, children, className }) => {
         className
       )}
     >
-     <div className="flex flex-col gap-y-6">
+      <div className="flex flex-col gap-y-6">
         {/* {Title} */}
-        {
-            title ? (<div className="font-pixel">
-                <p className="uppercase text-lg">{title}</p>
-            </div>)
-            : null
-        }
+        {title ? (
+          <div className="font-pixel">
+            <p className="uppercase text-lg">{title}</p>
+          </div>
+        ) : null}
 
         {/* Children */}
         {children}
-     </div>
+      </div>
     </div>
   );
 };

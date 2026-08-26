@@ -3,19 +3,22 @@
 @tailwind utilities;
 
 :root {
-  --color-gradient: linear-gradient(0deg, #2a446f -10%, #0b1f41 50%, #2a446f 110%);
-  --color-gradient4: radial-gradient(circle, rgba(250, 172, 168, 0.5) 18%, rgba(116, 143, 252, 0.5) 38%, rgba(56, 217, 169, 0.5) 59%, rgba(206, 212, 218, 0.5) 81%, rgba(218, 119, 242, 0.5) 100%);
-  --color-gradient: linear-gradient(135deg,
-      #7179ef,
-      rgb(21, 59, 95) 34%,
-      #693d55 67%,
-      rgb(240, 128, 128));
+  /*
+    The site's signature gradient. It was written out by hand in four separate
+    places; everything that uses it now reads it from here.
+  */
+  --signature-1: #7179ef;
+  --signature-2: rgb(21, 59, 95);
+  --signature-3: #693d55;
+  --signature-4: rgb(240, 128, 128);
 
-  --color-gradient4: linear-gradient(circle,
-      rgba(82, 0, 78, 0.692) 25%,
-      rgb(21, 59, 95) 50%,
-      #693d55 75%,
-      rgb(240, 128, 128) 100%);
+  --signature-gradient: linear-gradient(
+    135deg,
+    var(--signature-1),
+    var(--signature-2) 34%,
+    var(--signature-3) 67%,
+    var(--signature-4)
+  );
 }
 
 body {
@@ -33,42 +36,27 @@ body {
   }
 }
 
-
-
 /* Fancy Button */
 .fancy-btn {
-  /* background-image: linear-gradient(135deg, #00d372,
-      #56acff 34%,
-      #7179ef 67%,
-      #d87cac); */
-
-  background-image: linear-gradient(135deg,
-      #7179ef,
-      rgb(21, 59, 95) 34%,
-      #693d55 67%,
-      rgb(240, 128, 128));
-
+  background-image: var(--signature-gradient);
   border-radius: 100em;
   padding: 0.2vw;
   max-width: 100%;
-  display: inline-block
+  display: inline-block;
 }
 
 .fancy-bg {
-  background-image: linear-gradient(135deg,
-      #7179ef,
-      rgb(21, 59, 95) 34%,
-      #693d55 67%,
-      rgb(240, 128, 128));
-
+  background-image: var(--signature-gradient);
 }
 
 /* --Bottom Fade */
 
 .bottom_fade {
-  background-image: linear-gradient(0deg,
-      rgba(0, 0, 0, 0) 20.1275%,
-      rgba(255, 255, 255) 100%);
+  background-image: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 20.1275%,
+    rgba(255, 255, 255) 100%
+  );
 }
 
 /*---Svg curve---*/

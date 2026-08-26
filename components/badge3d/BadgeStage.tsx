@@ -74,7 +74,9 @@ const BadgeStage = () => {
   // Below this the headline already fills the viewport and the badge would
   // simply sit on top of it.
   const isWideEnough = useMediaQuery("(min-width: 1280px)");
-  const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const prefersReducedMotion = useMediaQuery(
+    "(prefers-reduced-motion: reduce)"
+  );
 
   const stageRef = useRef<HTMLDivElement>(null);
   const inView = useInViewport(stageRef, { rootMargin: "100px" });

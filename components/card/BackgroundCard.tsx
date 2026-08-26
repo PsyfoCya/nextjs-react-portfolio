@@ -15,14 +15,16 @@ const BackgroundCard = () => {
           <br />
           <br />
           That&apos;s where{" "}
-          <span className="text-white underline">technology got hold of me</span>
+          <span className="text-white underline">
+            technology got hold of me
+          </span>
           . PC gaming, mostly — <span>Doom, MAME32, Half-Life, The Sims</span> —
           and somewhere in there I came across programming and thought it was
           magic.{" "}
           <span className="text-white">
-            <em>Naturally</em> I wanted to understand the magic, so I enrolled at
-            IIE Rosebank College and graduated with a Diploma in IT in Software
-            Development at <strong>72%</strong>.
+            <em>Naturally</em> I wanted to understand the magic, so I enrolled
+            at IIE Rosebank College and graduated with a Diploma in IT in
+            Software Development at <strong>72%</strong>.
           </span>
           <br />
           <br />
@@ -30,8 +32,8 @@ const BackgroundCard = () => {
             From there I joined the Software Academy internship at{" "}
             <span className="text-white">Tshimologong Digital Precinct</span>,
             sponsored by Samsung, and then moved into frontend work at{" "}
-            <span className="text-white">Munch</span> — where I&apos;ve spent the
-            last two years on a platform that restaurants actually run their
+            <span className="text-white">Munch</span> — where I&apos;ve spent
+            the last two years on a platform that restaurants actually run their
             business on. Shipping to people whose revenue depends on your code
             being right teaches you a particular kind of care.
           </span>

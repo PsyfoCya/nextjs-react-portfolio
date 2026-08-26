@@ -1,9 +1,7 @@
 import Image from "next/image";
 import Card from "../ui/Card";
-import { galleryImages } from "@/data/Gallery";
+import { portrait } from "@/data/Gallery";
 import { cn } from "@/lib/utils";
-
-const myImage = galleryImages[0].img;
 
 const MeCard = () => {
   return (
@@ -11,7 +9,7 @@ const MeCard = () => {
       <div className="w-full h-[400px] sm:h-[500px] overflow-hidden">
         {/* Background Image */}
         <Image
-          src={myImage}
+          src={portrait}
           alt="Siyabonga Hadebe"
           className="absolute top-0 left-0 bottom-0 right-0 h-full w-full object-cover"
         />

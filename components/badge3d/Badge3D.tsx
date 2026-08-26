@@ -54,15 +54,23 @@ const Band = ({ texture, minSpeed = 6, maxSpeed = 24 }: BandProps) => {
     seeded: false,
   });
 
-  const [curve] = useState(() => {
-    const c = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(),
-      new THREE.Vector3(),
-      new THREE.Vector3(),
-      new THREE.Vector3(),
+  // The four control points are held directly rather than reached for through
+  // `curve.points[n]` each frame: same objects, but no indexing in the hot loop.
+  const [{ curve, clasp, midLower, midUpper, anchor }] = useState(() => {
+    const clasp = new THREE.Vector3();
+    const midLower = new THREE.Vector3();
+    const midUpper = new THREE.Vector3();
+    const anchor = new THREE.Vector3();
+
+    const curve = new THREE.CatmullRomCurve3([
+      clasp,
+      midLower,
+      midUpper,
+      anchor,
     ]);
-    c.curveType = "chordal";
-    return c;
+    curve.curveType = "chordal";
+
+    return { curve, clasp, midLower, midUpper, anchor };
   });
 
   const [dragged, drag] = useState<THREE.Vector3 | false>(false);
@@ -71,7 +79,10 @@ const Band = ({ texture, minSpeed = 6, maxSpeed = 24 }: BandProps) => {
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
   useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
-  useSphericalJoint(j3, card, [[0, 0, 0], [0, 1.45, 0]]);
+  useSphericalJoint(j3, card, [
+    [0, 0, 0],
+    [0, 1.45, 0],
+  ]);
 
   useEffect(() => () => strap.dispose(), [strap]);
 
@@ -84,15 +95,25 @@ const Band = ({ texture, minSpeed = 6, maxSpeed = 24 }: BandProps) => {
   }, [hovered, dragged]);
 
   useFrame((state, delta) => {
-    if (!fixed.current || !j1.current || !j2.current || !j3.current || !card.current) {
+    if (
+      !fixed.current ||
+      !j1.current ||
+      !j2.current ||
+      !j3.current ||
+      !card.current
+    ) {
       return;
     }
 
     if (dragged) {
       // Project the pointer onto the plane the card is floating in.
-      pointerTarget.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera);
+      pointerTarget
+        .set(state.pointer.x, state.pointer.y, 0.5)
+        .unproject(state.camera);
       cameraRay.copy(pointerTarget).sub(state.camera.position).normalize();
-      pointerTarget.add(cameraRay.multiplyScalar(state.camera.position.length()));
+      pointerTarget.add(
+        cameraRay.multiplyScalar(state.camera.position.length())
+      );
 
       [card, j1, j2, j3, fixed].forEach((ref) => ref.current?.wakeUp());
       card.current.setNextKinematicTranslation({
@@ -116,7 +137,10 @@ const Band = ({ texture, minSpeed = 6, maxSpeed = 24 }: BandProps) => {
     // stays attached while a resting badge settles smoothly.
     const chase = (target: THREE.Vector3, x: number, y: number, z: number) => {
       ropeTarget.set(x, y, z);
-      const distance = Math.max(0.1, Math.min(1, target.distanceTo(ropeTarget)));
+      const distance = Math.max(
+        0.1,
+        Math.min(1, target.distanceTo(ropeTarget))
+      );
       // Clamped, and this clamp is load-bearing. `lerp` extrapolates for any
       // alpha above 1, so on a slow frame a large `delta` makes the smoothed
       // rope points overshoot their targets instead of converging on them.
@@ -141,14 +165,14 @@ const Band = ({ texture, minSpeed = 6, maxSpeed = 24 }: BandProps) => {
     const cardRot = card.current.rotation();
     cardQuaternion.set(cardRot.x, cardRot.y, cardRot.z, cardRot.w);
     claspOffset.set(0, 1.16, 0).applyQuaternion(cardQuaternion);
-    curve.points[0].set(
+    clasp.set(
       cardPos.x + claspOffset.x,
       cardPos.y + claspOffset.y,
       cardPos.z + claspOffset.z
     );
-    curve.points[1].copy(smooth.j2);
-    curve.points[2].copy(smooth.j1);
-    curve.points[3].set(fixedPos.x, fixedPos.y, fixedPos.z);
+    midLower.copy(smooth.j2);
+    midUpper.copy(smooth.j1);
+    anchor.set(fixedPos.x, fixedPos.y, fixedPos.z);
 
     strap.update(curve);
 
@@ -238,7 +262,11 @@ const Band = ({ texture, minSpeed = 6, maxSpeed = 24 }: BandProps) => {
             {/* Clasp joining the card to the lanyard */}
             <mesh position={[0, 1.16, 0]}>
               <torusGeometry args={[0.09, 0.025, 12, 32]} />
-              <meshStandardMaterial color="#b9c0d4" metalness={1} roughness={0.25} />
+              <meshStandardMaterial
+                color="#b9c0d4"
+                metalness={1}
+                roughness={0.25}
+              />
             </mesh>
           </group>
         </RigidBody>

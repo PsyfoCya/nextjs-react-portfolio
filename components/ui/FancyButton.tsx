@@ -1,47 +1,33 @@
 "use client";
 
-// import { FC, ReactNode } from "react";
-
-// interface FancyButtonProps {
-//   text: string;
-//   icon: ReactNode;
-// }
-
-// const FancyButton: FC<FancyButtonProps> = ({ text, icon }) => {
-//   return (
-//     <a className="fancy-btn">
-//       <div className="group bg-black hover:bg-transparent text-primary-foreground hover:text-white rounded-[108em] py-5 px-10 flex items-center gap-2 font-bold text-3xl cursor-none transition-all duration-500">
-//         <span>{text}</span>
-//         <span className="group-hover:translate-x-[.75vw] transition-transform duration-500">
-//           {icon}
-//         </span>
-//       </div>
-//     </a>
-//   );
-// };
-
-// export default FancyButton;
-
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface FancyButtonProps {
   text: string;
   icon: ReactNode;
-  onClick?: () => void; // Add onClick as an optional prop
+  onClick?: () => void;
 }
 
-const FancyButton: FC<FancyButtonProps> = ({ text, icon, onClick }) => {
-  return (
-    <a className="fancy-btn" onClick={onClick}>
-      <div className="group bg-black hover:bg-transparent text-primary-foreground hover:text-white rounded-[108em] py-5 px-10 flex items-center gap-2 font-bold text-3xl cursor-none transition-all duration-500 z-50">
-        <span>{text}</span>
-        <span className="group-hover:translate-x-[.75vw] transition-transform duration-500">
-          {icon}
-        </span>
-      </div>
-    </a>
-  );
-};
+/**
+ * The gradient-ringed "Contact Me" call to action.
+ *
+ * A real `<button>`. It used to be an `<a>` with an `onClick` and no `href`,
+ * which meant the site's primary CTA could not be reached by keyboard or
+ * announced as a control — and `cursor-none` removed the only hint that it was
+ * interactive at all.
+ *
+ * The gradient lives on the wrapper; the inner surface is opaque black and goes
+ * transparent on hover to reveal it.
+ */
+const FancyButton = ({ text, icon, onClick }: FancyButtonProps) => (
+  <button type="button" onClick={onClick} className="fancy-btn group block">
+    <div className="flex items-center gap-2 rounded-[108em] bg-black px-10 py-5 text-3xl font-bold text-primary-foreground transition-all duration-500 group-hover:bg-transparent group-hover:text-white group-focus-visible:bg-transparent">
+      <span>{text}</span>
+      <span className="transition-transform duration-500 group-hover:translate-x-[.75vw]">
+        {icon}
+      </span>
+    </div>
+  </button>
+);
 
 export default FancyButton;
-

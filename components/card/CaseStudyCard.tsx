@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { FC } from "react";
 import { FiArrowUpRight } from "react-icons/fi";
 import { cn } from "@/lib/utils";
 import Chip from "../ui/Chip";
@@ -11,7 +10,7 @@ interface CaseStudyCardProps {
   variant?: "large" | "compact";
 }
 
-const CaseStudyCard: FC<CaseStudyCardProps> = ({ study, variant = "large" }) => {
+const CaseStudyCard = ({ study, variant = "large" }: CaseStudyCardProps) => {
   const isLarge = variant === "large";
 
   return (

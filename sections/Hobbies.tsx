@@ -1,12 +1,13 @@
 import Heading from "@/components/heading/Heading";
 import Card from "@/components/ui/Card";
 import Chip from "@/components/ui/Chip";
+import Section from "@/components/ui/Section";
 
 const plannedTopics = ["Gaming", "Music", "Photography", "Side projects"];
 
 const Hobbies = () => {
   return (
-    <div className="pt-16 sm:pt-24 px-3 lg:px-8">
+    <Section>
       <Heading
         number="04"
         title_1="Off"
@@ -38,7 +39,7 @@ const Hobbies = () => {
           </div>
         </Card>
       </div>
-    </div>
+    </Section>
   );
 };
 

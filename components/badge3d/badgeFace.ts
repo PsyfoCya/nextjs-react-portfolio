@@ -106,10 +106,21 @@ export const createBadgeTexture = async ({
   ctx.clip();
   if (photo) {
     const side = photoRadius * 2;
-    ctx.drawImage(photo, WIDTH / 2 - photoRadius, photoY - photoRadius, side, side);
+    ctx.drawImage(
+      photo,
+      WIDTH / 2 - photoRadius,
+      photoY - photoRadius,
+      side,
+      side
+    );
   } else {
     ctx.fillStyle = "#1d2440";
-    ctx.fillRect(WIDTH / 2 - photoRadius, photoY - photoRadius, photoRadius * 2, photoRadius * 2);
+    ctx.fillRect(
+      WIDTH / 2 - photoRadius,
+      photoY - photoRadius,
+      photoRadius * 2,
+      photoRadius * 2
+    );
   }
   ctx.restore();
 

@@ -4,14 +4,16 @@ import CaseStudyCard from "@/components/card/CaseStudyCard";
 import Heading from "@/components/heading/Heading";
 import Card from "@/components/ui/Card";
 import Chip from "@/components/ui/Chip";
-import { caseStudies, currentRole } from "@/data/Index";
-
-const featured = caseStudies.filter((study) => study.featured);
-const secondary = caseStudies.filter((study) => !study.featured);
+import {
+  currentRole,
+  featuredCaseStudies,
+  secondaryCaseStudies,
+} from "@/data/Index";
+import Section from "@/components/ui/Section";
 
 const Work = () => {
   return (
-    <div className="pt-16 sm:pt-24 px-3 lg:px-8">
+    <Section>
       <Heading
         number="01"
         title_1="Case"
@@ -71,14 +73,14 @@ const Work = () => {
 
       {/* The three headline case studies */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
-        {featured.map((study) => (
+        {featuredCaseStudies.map((study) => (
           <CaseStudyCard key={study.slug} study={study} />
         ))}
       </div>
 
       {/* Shorter write-ups */}
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-        {secondary.map((study) => (
+        {secondaryCaseStudies.map((study) => (
           <CaseStudyCard key={study.slug} study={study} variant="compact" />
         ))}
       </div>
@@ -95,7 +97,7 @@ const Work = () => {
           />
         </Link>
       </div>
-    </div>
+    </Section>
   );
 };
 

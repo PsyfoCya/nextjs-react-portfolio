@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import { FiArrowUpRight } from "react-icons/fi";
+import ExternalLink from "./ExternalLink";
 
 // Timeline ------------------------------------------------------------------
 
@@ -8,7 +8,7 @@ interface TimelineProps {
   children: ReactNode;
 }
 
-const Timeline: FC<TimelineProps> = ({ children }) => {
+const Timeline = ({ children }: TimelineProps) => {
   return <div className="flex flex-col gap-y-6">{children}</div>;
 };
 
@@ -24,15 +24,13 @@ interface TimelineItemProps {
   tag?: string;
 }
 
-export const TimelineItem: FC<TimelineItemProps> = ({
+export const TimelineItem = ({
   date,
   subTitle,
   title,
   link,
   tag,
-}) => {
-  const isExternal = link?.startsWith("http");
-
+}: TimelineItemProps) => {
   return (
     <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:gap-6 justify-start relative">
       {/* Date Timeline */}
@@ -51,13 +49,9 @@ export const TimelineItem: FC<TimelineItemProps> = ({
           {/* Subtitle */}
           <div className="flex items-center gap-2 w-full">
             {link ? (
-              <Link
-                href={link}
-                target={isExternal ? "_blank" : undefined}
-                rel={isExternal ? "noopener noreferrer" : undefined}
-              >
+              <ExternalLink href={link}>
                 <Body link={link} subTitle={subTitle} tag={tag} />
-              </Link>
+              </ExternalLink>
             ) : (
               <Body subTitle={subTitle} tag={tag} />
             )}
@@ -76,11 +70,13 @@ interface BodyProps {
   link?: string;
 }
 
-const Body: FC<BodyProps> = ({ link, subTitle, tag }) => {
+const Body = ({ link, subTitle, tag }: BodyProps) => {
   return (
     <div className="text-secondary-foreground w-full gap-2 sm:gap-3 flex flex-wrap items-center">
       {link ? <FiArrowUpRight className="shrink-0" /> : null}
-      <p className="text-sm font-normal sm:w-[15rem] leading-6 mt-1">{subTitle}</p>
+      <p className="text-sm font-normal sm:w-[15rem] leading-6 mt-1">
+        {subTitle}
+      </p>
 
       {tag ? (
         <div className="rounded-[20px] bg-white/5 py-0.5 px-1.5 sm:ms-2">

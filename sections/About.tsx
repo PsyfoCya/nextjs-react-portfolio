@@ -1,17 +1,17 @@
 import BackgroundCard from "@/components/card/BackgroundCard";
-import CertificationCard from "@/components/card/CertificationsCard";
-import EducationCard from "@/components/card/EducationCard";
-import ExperienceCard from "@/components/card/ExperienceCard";
 import MeCard from "@/components/card/MeCard";
 import ResumeCard from "@/components/card/ResumeCard";
 import StackCard from "@/components/card/StackCard";
+import TimelineCard from "@/components/card/TimelineCard";
 import Heading from "@/components/heading/Heading";
 import Card from "@/components/ui/Card";
 import Gallery from "@/components/ui/Gallery";
+import Section from "@/components/ui/Section";
+import { certifications, education, experience } from "@/data/Timeline";
 
 const About = () => {
   return (
-    <div className="pt-16 sm:pt-24 px-3 lg:px-8">
+    <Section>
       {/* Heading */}
       <Heading
         number="03"
@@ -45,15 +45,15 @@ const About = () => {
         </section>
 
         <section id="certifications">
-          <CertificationCard />
+          <TimelineCard title="My Certifications" entries={certifications} />
         </section>
 
         <div className="space-y-4">
           <section id="experience">
-            <ExperienceCard />
+            <TimelineCard title="My Experience" entries={experience} />
           </section>
           <section id="education">
-            <EducationCard />
+            <TimelineCard title="My Education" entries={education} />
           </section>
           <section id="stack">
             <StackCard />
@@ -64,7 +64,7 @@ const About = () => {
           <Gallery />
         </section>
       </div>
-    </div>
+    </Section>
   );
 };
 

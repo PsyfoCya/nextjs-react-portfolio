@@ -2,15 +2,16 @@ import type { Metadata } from "next";
 import CaseStudyCard from "@/components/card/CaseStudyCard";
 import PageShell from "@/components/layout/PageShell";
 import Chip from "@/components/ui/Chip";
-import { caseStudies, currentRole } from "@/data/Index";
+import {
+  currentRole,
+  featuredCaseStudies,
+  secondaryCaseStudies,
+} from "@/data/Index";
 
 export const metadata: Metadata = {
   title: "Case Studies",
   description: `Frontend case studies from ${currentRole.duration} at ${currentRole.company} — a restaurant management and online ordering platform. Problem, approach, and outcome for each.`,
 };
-
-const featured = caseStudies.filter((study) => study.featured);
-const secondary = caseStudies.filter((study) => !study.featured);
 
 const WorkIndex = () => {
   return (
@@ -37,7 +38,7 @@ const WorkIndex = () => {
           Selected work
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {featured.map((study) => (
+          {featuredCaseStudies.map((study) => (
             <CaseStudyCard key={study.slug} study={study} />
           ))}
         </div>
@@ -48,7 +49,7 @@ const WorkIndex = () => {
           Also shipped
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {secondary.map((study) => (
+          {secondaryCaseStudies.map((study) => (
             <CaseStudyCard key={study.slug} study={study} variant="compact" />
           ))}
         </div>

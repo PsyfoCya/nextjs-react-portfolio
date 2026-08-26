@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface TextAreaProps {
   icon?: ReactNode;
@@ -9,13 +9,13 @@ interface TextAreaProps {
   disabled?: boolean;
 }
 
-const TextArea: FC<TextAreaProps> = ({
+const TextArea = ({
   icon,
   placeholder,
   name,
   required,
   disabled,
-}) => {
+}: TextAreaProps) => {
   return (
     <div className="relative w-full">
       {/* Icon */}

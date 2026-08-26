@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { FC } from "react";
 import Header from "./Header";
 import Video from "./Video";
 
@@ -12,13 +11,13 @@ interface FeaturedCardProps {
   link?: string;
 }
 
-const FeaturedCard: FC<FeaturedCardProps> = ({
+const FeaturedCard = ({
   title,
   tag,
   video,
   active,
   link,
-}) => {
+}: FeaturedCardProps) => {
   const body = (
     <div className="link w-full h-full bg-secondary-background border border-border shadow-lg rounded-3xl cursor-pointer flex flex-col gap-2 flex-nowrap p-2">
       {/* Header */}
