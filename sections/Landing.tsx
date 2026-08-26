@@ -1,9 +1,7 @@
 import Header from "@/components/navigation/header/Header";
-import FancyButton from "@/components/ui/FancyButton";
+import ContactCta from "@/components/ui/ContactCta";
 import LiveClock from "@/components/ui/LiveClock";
-import MagneticWrapper from "@/components/visualEffects/MagneticWrapper";
 import BadgeStage from "@/components/badge3d/BadgeStage";
-import { FaArrowRight } from "react-icons/fa6";
 
 const strapline = [
   "Frontend developer in Johannesburg",
@@ -13,10 +11,6 @@ const strapline = [
 ];
 
 const Landing = () => {
-  const scrollToContact = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <div className="relative min-h-screen overflow-hidden p-4 sm:p-8">
       {/* Header */}
@@ -58,13 +52,7 @@ const Landing = () => {
 
       {/* Contact + clock, stacked under the headline on small devices */}
       <div className="relative z-30 mt-16 flex flex-col items-center gap-4 md:hidden">
-        <MagneticWrapper>
-          <FancyButton
-            text="Contact Me"
-            icon={<FaArrowRight />}
-            onClick={scrollToContact}
-          />
-        </MagneticWrapper>
+        <ContactCta />
         <LiveClock timeZone="Johannesburg" />
       </div>
 

@@ -1,3 +1,5 @@
+"use client";
+
 import featuredData from "@/data/Featured";
 import FeaturedCard from "../card/Featured/FeaturedCard";
 import { cn } from "@/lib/utils";

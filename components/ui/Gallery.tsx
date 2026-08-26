@@ -1,3 +1,5 @@
+"use client";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -16,12 +18,15 @@ const Gallery = () => {
         autoplay={{ delay: 2500, disableOnInteraction: false }}
         className="mySwiper rounded-2xl"
       >
-        {galleryImages.map((img) => (
+        {galleryImages.map((img, index) => (
           <SwiperSlide key={img.id}>
             <Image
-              key={img.id}
               src={img.img}
               alt=""
+              // Only the first slide is visible on arrival; the rest can wait.
+              loading={index === 0 ? "eager" : "lazy"}
+              placeholder="blur"
+              sizes="(max-width: 768px) 100vw, 33vw"
               className="object-cover w-full h-full object-left-top"
             />
           </SwiperSlide>
