@@ -46,13 +46,22 @@ const Contact = () => {
       return;
     }
 
+    // A deploy missing the NEXT_PUBLIC_EMAILJS_* variables would otherwise
+    // fail deep inside EmailJS with an opaque message.
+    const config = emailjsConfig;
+    if (!config) {
+      setErrorDetail("Contact form is not configured");
+      setStatus("error");
+      return;
+    }
+
     setStatus("sending");
     setErrorDetail("");
 
     try {
       await emailjs.send(
-        emailjsConfig.serviceId,
-        emailjsConfig.templateId,
+        config.serviceId,
+        config.templateId,
         toTemplateParams({
           name: value("name"),
           email: value("email"),
@@ -60,7 +69,7 @@ const Contact = () => {
           message: value("message"),
         }),
         {
-          publicKey: emailjsConfig.publicKey,
+          publicKey: config.publicKey,
           // Cheap client-side brake on repeat submissions. The real limit
           // belongs in the EmailJS dashboard, since anyone can bypass this.
           limitRate: { id: "contact", throttle: 10_000 },
