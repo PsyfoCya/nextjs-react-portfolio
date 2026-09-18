@@ -1,17 +1,19 @@
+"use client";
+
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { FC } from "react";
 import { menuSlide } from "./animations";
 import Curve from "./Curve";
 import NavLink from "./NavLink";
 import MenuCard from "./MenuCard";
 import Profile from "@/components/ui/Profile";
+import { socialLinks } from "@/data/Links";
 
 interface FullScreenMenuProps {
   closeMenu: () => void;
 }
 
-const FullScreenMenu: FC<FullScreenMenuProps> = ({ closeMenu }) => {
+const FullScreenMenu = ({ closeMenu }: FullScreenMenuProps) => {
   return (
     <motion.div
       variants={menuSlide}
@@ -43,21 +45,21 @@ const FullScreenMenu: FC<FullScreenMenuProps> = ({ closeMenu }) => {
         <div className="flex flex-wrap items-center justify-between gap-4 uppercase text-white">
           <div className="flex flex-wrap items-center gap-4 text-sm sm:text-base">
             <Link
-              href="https://www.linkedin.com/in/siyabonga-hadebe-25385620b/"
+              href={socialLinks.linkedin}
               target="_blank"
               rel="noopener noreferrer"
             >
               LINKEDIN
             </Link>
             <Link
-              href="https://github.com/PsyfoCya"
+              href={socialLinks.github}
               target="_blank"
               rel="noopener noreferrer"
             >
               GITHUB
             </Link>
             <Link
-              href="https://www.youtube.com/@noiamnotsomebodyelse"
+              href={socialLinks.youtube}
               target="_blank"
               rel="noopener noreferrer"
             >

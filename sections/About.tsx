@@ -1,18 +1,33 @@
 import BackgroundCard from "@/components/card/BackgroundCard";
-import CertificationCard from "@/components/card/CertificationsCard";
-import EducationCard from "@/components/card/EducationCard";
-import ExperienceCard from "@/components/card/ExperienceCard";
 import MeCard from "@/components/card/MeCard";
 import ResumeCard from "@/components/card/ResumeCard";
 import StackCard from "@/components/card/StackCard";
+import TimelineCard from "@/components/card/TimelineCard";
 import Heading from "@/components/heading/Heading";
 import Card from "@/components/ui/Card";
 import Gallery from "@/components/ui/Gallery";
+import Section from "@/components/ui/Section";
+import Reveal from "@/components/visualEffects/Reveal";
+import { certifications, education, experience } from "@/data/Timeline";
 
+/**
+ * A bento on a fixed row unit.
+ *
+ * The spans are chosen per card from how much content it actually holds, which
+ * is the part a plain stretch grid cannot do: making every card fill its row
+ * left the two-entry Education and Experience cards as tall as the nine-entry
+ * Certifications card, all of them mostly empty. Short things now get short
+ * cells.
+ *
+ * `auto-rows-[5.5rem]` plus `row-span-*` is what makes the bottoms line up.
+ * `grid-flow-dense` lets a short card backfill a gap a taller neighbour left.
+ *
+ * Order is the reading order: who I am, what I do, where I came from, where
+ * I have worked, what I studied, what I use, and then the personal one.
+ */
 const About = () => {
   return (
-    <div className="pt-16 sm:pt-24 px-3 lg:px-8">
-      {/* Heading */}
+    <Section>
       <Heading
         number="03"
         title_1="About"
@@ -25,46 +40,88 @@ const About = () => {
         duplicated for mobile and desktop — duplicate ids broke the menu's
         anchor links.
       */}
-      <div className="grid grid-cols-1 gap-4 py-8 md:grid-cols-2 2xl:grid-cols-3">
-        <section id="me">
-          <Card title="Me">
+      <div className="grid grid-cols-1 gap-4 py-8 md:auto-rows-[5.5rem] md:grid-flow-dense md:grid-cols-6">
+        <Reveal
+          index={0}
+          className="h-full md:col-span-3 md:row-span-5 2xl:col-span-2"
+        >
+          <section id="me" className="h-full">
             <MeCard />
-          </Card>
-        </section>
+          </section>
+        </Reveal>
 
-        <section id="resume">
-          <Card title="Resume">
+        <Reveal
+          index={1}
+          className="h-full md:col-span-3 md:row-span-5 2xl:col-span-2"
+        >
+          <section id="resume" className="h-full">
             <ResumeCard />
-          </Card>
-        </section>
+          </section>
+        </Reveal>
 
-        <section id="background">
-          <Card title="My Background">
+        <Reveal
+          index={2}
+          className="h-full md:col-span-3 md:row-span-5 2xl:col-span-2"
+        >
+          <section id="background" className="h-full">
             <BackgroundCard />
-          </Card>
-        </section>
-
-        <section id="certifications">
-          <CertificationCard />
-        </section>
-
-        <div className="space-y-4">
-          <section id="experience">
-            <ExperienceCard />
           </section>
-          <section id="education">
-            <EducationCard />
+        </Reveal>
+
+        {/* Two entries each — deliberately short cells. */}
+        <Reveal
+          index={3}
+          className="h-full md:col-span-3 md:row-span-3 2xl:col-span-2"
+        >
+          <section id="experience" className="h-full">
+            <TimelineCard title="My Experience" entries={experience} />
           </section>
-          <section id="stack">
+        </Reveal>
+
+        <Reveal
+          index={3}
+          className="h-full md:col-span-3 md:row-span-3 2xl:col-span-2"
+        >
+          <section id="education" className="h-full">
+            <TimelineCard title="My Education" entries={education} />
+          </section>
+        </Reveal>
+
+        {/* Nine entries, capped at three with a toggle. */}
+        <Reveal
+          index={4}
+          className="h-full md:col-span-3 md:row-span-4 2xl:col-span-2"
+        >
+          <section id="certifications" className="h-full">
+            <TimelineCard
+              title="My Certifications"
+              entries={certifications}
+              initialCount={3}
+            />
+          </section>
+        </Reveal>
+
+        <Reveal
+          index={4}
+          className="h-full md:col-span-3 md:row-span-4 2xl:col-span-3"
+        >
+          <section id="stack" className="h-full">
             <StackCard />
           </section>
-        </div>
+        </Reveal>
 
-        <section id="gallery">
-          <Gallery />
-        </section>
+        <Reveal
+          index={5}
+          className="h-full md:col-span-6 md:row-span-6 2xl:col-span-3"
+        >
+          <section id="gallery" className="h-full">
+            <Card title="Gallery" fill>
+              <Gallery />
+            </Card>
+          </section>
+        </Reveal>
       </div>
-    </div>
+    </Section>
   );
 };
 

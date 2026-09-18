@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface TextAreaProps {
   icon?: ReactNode;
@@ -9,13 +9,13 @@ interface TextAreaProps {
   disabled?: boolean;
 }
 
-const TextArea: FC<TextAreaProps> = ({
+const TextArea = ({
   icon,
   placeholder,
   name,
   required,
   disabled,
-}) => {
+}: TextAreaProps) => {
   return (
     <div className="relative w-full">
       {/* Icon */}
@@ -28,7 +28,7 @@ const TextArea: FC<TextAreaProps> = ({
         required={required}
         disabled={disabled}
         aria-label={placeholder}
-        className="bg-primary-background text-primary-foreground w-full rounded-lg text-sm ps-10 p-2.5 pt-9 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/40 disabled:opacity-60 cursor-none"
+        className="gradient-ring gradient-ring--field w-full p-2.5 pt-9 ps-10 text-sm text-primary-foreground focus:outline-none disabled:opacity-60"
       />
     </div>
   );

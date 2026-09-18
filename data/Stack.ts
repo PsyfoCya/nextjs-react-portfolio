@@ -22,7 +22,7 @@ import {
   SiStorybook,
 } from "react-icons/si";
 
-interface StackItem {
+export interface StackItem {
   id: number;
   title: string;
   image?: StaticImageData;
@@ -30,7 +30,7 @@ interface StackItem {
   bgColor?: string;
 }
 
-interface StackGroup {
+export interface StackGroup {
   title: string;
   stack: StackItem[];
 }

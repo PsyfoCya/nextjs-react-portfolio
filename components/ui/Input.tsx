@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface InputProps {
   icon?: ReactNode;
@@ -11,7 +11,7 @@ interface InputProps {
   autoComplete?: string;
 }
 
-const Input: FC<InputProps> = ({
+const Input = ({
   icon,
   placeholder,
   type,
@@ -19,7 +19,7 @@ const Input: FC<InputProps> = ({
   required,
   disabled,
   autoComplete,
-}) => {
+}: InputProps) => {
   return (
     <div className="relative w-full">
       {/* Icon */}
@@ -34,7 +34,10 @@ const Input: FC<InputProps> = ({
         disabled={disabled}
         autoComplete={autoComplete}
         aria-label={placeholder}
-        className="!bg-primary-background text-primary-foreground w-full rounded-lg text-sm ps-10 px-2.5 py-4 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/40 disabled:opacity-60"
+        // The ring, not a `bg-*` utility: `gradient-ring` paints through
+        // `background-image`, so any background class on the same element
+        // wipes it out. `--card-surface` is how the fill is set instead.
+        className="gradient-ring gradient-ring--field w-full px-2.5 py-4 ps-10 text-sm text-primary-foreground focus:outline-none disabled:opacity-60"
       />
     </div>
   );

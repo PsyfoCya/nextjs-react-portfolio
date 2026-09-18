@@ -9,7 +9,8 @@ Tailwind CSS, deployed on Vercel.
 npm install
 npm run dev      # http://localhost:3000
 npm run build    # production build
-npm run lint     # eslint
+npm run lint     # eslint (next/core-web-vitals + @typescript-eslint/recommended)
+npm run format   # prettier
 npx tsc --noEmit # typecheck
 ```
 
@@ -21,8 +22,7 @@ npx tsc --noEmit # typecheck
 | `sections/`   | The composed blocks of the home page — Landing, Work, Featured, About, Hobbies, Contact. |
 | `components/` | Reusable UI, cards, navigation and visual effects.                    |
 | `data/`       | Content as typed modules — case studies, side projects, stack, gallery. |
-| `lib/`        | Small shared helpers (`cn`, in-page scrolling, EmailJS config).       |
-| `types/`      | Ambient declarations for untyped dependencies.                        |
+| `lib/`        | Shared helpers and hooks (`cn`, in-page scrolling, EmailJS config, `useInViewport`, `useContactForm`). |
 
 Content is data, not markup: case studies live in `data/CaseStudies.ts` and the
 `/work/[slug]` route is generated from that array via `generateStaticParams`.
@@ -78,13 +78,18 @@ was empty.
   in-page anchors and links out to the case-study routes.
 - `next.config.mjs` does not skip type errors — `npx tsc --noEmit` must pass
   before a build will.
-- The water-ripple background renders through WebGL and is loaded client-side
-  only.
-- The landing page's interactive lanyard badge (`components/badge3d/`) mounts
-  only above 1280px, and via a JS media query rather than a `hidden lg:block`
-  class — CSS would hide it while still mounting the component and downloading
-  three.js and rapier's wasm on phones. Visitors who ask for reduced motion get
-  a static card instead.
+- `app/page.tsx` is a server component. Only the leaves that need the browser
+  carry `"use client"`, so the static sections ship as HTML rather than JS.
+  Keep it that way — wrapping the page in a client component puts the entire
+  home page back into the bundle and out of the prerendered HTML.
+- The lanyard access card (`components/accessCard/`) mounts only above 1280px, via a
+  JS media query rather than a `hidden lg:block` class — CSS would hide it while
+  still mounting the component and downloading three.js and rapier's wasm on
+  phones. Visitors who ask for reduced motion get a static card instead. Its
+  canvas and physics world pause via `useInViewport` when scrolled away.
+- Anything that runs on a timer or a frame loop should be gated on
+  `useInViewport` (`lib/useInViewport.ts`) — the gallery autoplay, the project
+  videos and the access card all are.
 - `ScrollMemory` records the scroll offset per route in sessionStorage, so
   returning from a case study lands you where you left off rather than at the
   top.

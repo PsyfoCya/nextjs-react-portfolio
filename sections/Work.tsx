@@ -4,14 +4,17 @@ import CaseStudyCard from "@/components/card/CaseStudyCard";
 import Heading from "@/components/heading/Heading";
 import Card from "@/components/ui/Card";
 import Chip from "@/components/ui/Chip";
-import { caseStudies, currentRole } from "@/data/Index";
-
-const featured = caseStudies.filter((study) => study.featured);
-const secondary = caseStudies.filter((study) => !study.featured);
+import {
+  currentRole,
+  featuredCaseStudies,
+  secondaryCaseStudies,
+} from "@/data/Index";
+import Section from "@/components/ui/Section";
+import Reveal from "@/components/visualEffects/Reveal";
 
 const Work = () => {
   return (
-    <div className="pt-16 sm:pt-24 px-3 lg:px-8">
+    <Section>
       <Heading
         number="01"
         title_1="Case"
@@ -71,22 +74,26 @@ const Work = () => {
 
       {/* The three headline case studies */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
-        {featured.map((study) => (
-          <CaseStudyCard key={study.slug} study={study} />
+        {featuredCaseStudies.map((study, i) => (
+          <Reveal key={study.slug} index={i} className="h-full">
+            <CaseStudyCard study={study} />
+          </Reveal>
         ))}
       </div>
 
       {/* Shorter write-ups */}
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-        {secondary.map((study) => (
-          <CaseStudyCard key={study.slug} study={study} variant="compact" />
+        {secondaryCaseStudies.map((study, i) => (
+          <Reveal key={study.slug} index={i} className="h-full">
+            <CaseStudyCard study={study} variant="compact" />
+          </Reveal>
         ))}
       </div>
 
       <div className="mt-10 flex justify-center">
         <Link
           href="/work"
-          className="link group flex items-center gap-3 rounded-full border border-border bg-primary-background px-6 py-3 text-primary-foreground transition-colors duration-200 hover:bg-white/[0.1]"
+          className="gradient-ring link group flex items-center gap-3 rounded-full px-6 py-3 text-primary-foreground"
         >
           <span className="font-medium">Read all case studies</span>
           <FiArrowRight
@@ -95,7 +102,7 @@ const Work = () => {
           />
         </Link>
       </div>
-    </div>
+    </Section>
   );
 };
 

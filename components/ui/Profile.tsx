@@ -15,6 +15,10 @@ const Profile = () => {
         <Image
           src={myImage}
           alt="Siyabonga Hadebe"
+          // Top of the header on every route, so it is the LCP candidate —
+          // worth preloading rather than waiting for the lazy-load observer.
+          priority
+          sizes="100px"
           className="w-[64px] h-[64px] sm:w-[95px] sm:h-[95px] border-[0.2vw] border-blue-cosmos rounded-full object-cover"
         />
 

@@ -1,8 +1,10 @@
-import { FC, MouseEvent, useState } from "react";
+"use client";
+
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { scale, slide } from "./animations";
-import { isHashLink, scrollToHash } from "@/lib/utils";
+import { useHashNavigation } from "@/lib/useHashNavigation";
 
 interface NavLinkProps {
   data: {
@@ -13,17 +15,12 @@ interface NavLinkProps {
   closeMenu: () => void;
 }
 
-const NavLink: FC<NavLinkProps> = ({ data, closeMenu }) => {
+const NavLink = ({ data, closeMenu }: NavLinkProps) => {
   const { title, href, index } = data;
   const [hovered, setHovered] = useState<boolean>(false);
 
-  const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
-    closeMenu();
-    // Route links navigate normally; only in-page anchors get intercepted.
-    if (isHashLink(href) && scrollToHash(href)) {
-      e.preventDefault();
-    }
-  };
+  // Route links navigate normally; only in-page anchors get intercepted.
+  const handleLinkClick = useHashNavigation(closeMenu);
 
   return (
     <motion.div
@@ -43,7 +40,7 @@ const NavLink: FC<NavLinkProps> = ({ data, closeMenu }) => {
       ></motion.div>
       <Link
         href={href}
-        onClick={handleClick}
+        onClick={(e) => handleLinkClick(e, href)}
         className="text-[9vw] lg:text-[6vw] uppercase leading-[110%] lg:leading-[96%] font-bold"
       >
         {title}

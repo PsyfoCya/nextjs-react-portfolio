@@ -1,15 +1,14 @@
+"use client";
+
 import { cn } from "@/lib/utils";
-import { FC, useId, useState } from "react";
+import { useId, useState } from "react";
 
 interface HeadingAnimatedSvg {
   animated?: boolean;
   text: string;
 }
 
-export const HeadingAnimatedSvg: FC<HeadingAnimatedSvg> = ({
-  animated,
-  text,
-}) => {
+export const HeadingAnimatedSvg = ({ animated, text }: HeadingAnimatedSvg) => {
   const [active, setActive] = useState<boolean>(animated || false);
   // Every instance rendered its own copy of the same hardcoded ids, which meant
   // duplicate ids in the document and a textPath href that could resolve to the

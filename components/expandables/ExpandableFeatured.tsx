@@ -1,4 +1,6 @@
-import featuredData from "@/data/Featured";
+"use client";
+
+import { supportingProjects } from "@/data/Featured";
 import FeaturedCard from "../card/Featured/FeaturedCard";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -8,7 +10,7 @@ const ExpandableFeatured = () => {
 
   return (
     <div className="w-full grid lg:flex lg:justify-between lg:gap-x-4">
-      {featuredData.slice(1).map((featured, i) => (
+      {supportingProjects.map((featured, i) => (
         <div
           key={featured.title}
           className={cn(

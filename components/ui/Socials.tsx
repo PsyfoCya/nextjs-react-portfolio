@@ -1,15 +1,16 @@
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
 import Button from "./Button";
+import { socialLinks } from "@/data/Links";
 
 const socials = [
   {
     icon: <FaLinkedin className="w-4 h-4" />,
-    link: "https://www.linkedin.com/in/siyabonga-hadebe-25385620b",
+    link: socialLinks.linkedin,
     label: "LinkedIn",
   },
   {
     icon: <FaGithub className="w-4 h-4" />,
-    link: "https://github.com/PsyfoCya",
+    link: socialLinks.github,
     label: "GitHub",
   },
 ];

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface ButtonProps {
   children: ReactNode;
@@ -12,13 +12,13 @@ interface ButtonProps {
   ariaLabel?: string;
 }
 
-const Button: FC<ButtonProps> = ({
+const Button = ({
   children,
   link,
   isIcon,
   className,
   ariaLabel,
-}) => {
+}: ButtonProps) => {
   return (
     <>
       {link ? (
@@ -48,12 +48,12 @@ interface ButtonBodyProps {
   className?: string;
 }
 
-const ButtonBody: FC<ButtonBodyProps> = ({ children, isIcon, className }) => {
+const ButtonBody = ({ children, isIcon, className }: ButtonBodyProps) => {
   return (
     <div className="flex-none w-auto h-full">
       <div
         className={cn(
-          "flex items-center justify-center gap-2 bg-primary-background rounded-full select-none whitespace-nowrap text-primary-foreground text-sm font-medium hover:bg-white/[0.1] transition-colors duration-100",
+          "gradient-ring flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium text-primary-foreground",
           className,
           isIcon ? "h-10 w-10" : "h-full w-max px-3 py-2"
         )}

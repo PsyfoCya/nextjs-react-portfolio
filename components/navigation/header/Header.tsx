@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { FaArrowRight } from "react-icons/fa6";
-import FancyButton from "@/components/ui/FancyButton";
+import ContactCta from "@/components/ui/ContactCta";
 import Profile from "@/components/ui/Profile";
-import MagneticWrapper from "@/components/visualEffects/MagneticWrapper";
 import FullScreenMenu from "./fullScreenMenu/FullScreenMenu";
 import ToggleButton from "./fullScreenMenu/ToggleButton";
 
@@ -11,34 +11,33 @@ const Header = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [showToggle, setShowToggle] = useState<boolean>(false);
 
-  const scrollToContact = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   useEffect(() => {
+    // Coalesced into a frame rather than handled per event: scroll fires far
+    // more often than 60Hz, and this only ever flips a boolean.
+    let queued = false;
     const handleScroll = () => {
-      setShowToggle(window.scrollY >= 80);
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        setShowToggle(window.scrollY >= 80);
+      });
     };
-    window.addEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  const closeMenu = () => setOpen(false);
+  const closeMenu = useCallback(() => setOpen(false), []);
 
   return (
     <div className="w-full flex items-center justify-center md:justify-between">
       <Profile />
       <div className="hidden md:inline">
-        <MagneticWrapper>
-          <FancyButton
-            text="Contact Me"
-            icon={<FaArrowRight />}
-            onClick={scrollToContact}
-          />
-        </MagneticWrapper>
+        <ContactCta />
       </div>
 
       {/* Toggle Btn */}

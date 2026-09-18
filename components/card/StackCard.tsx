@@ -4,7 +4,7 @@ import Tooltip from "../ui/Tooltip";
 
 const StackCard = () => {
   return (
-    <Card title="My Tech Stack">
+    <Card title="My Tech Stack" fill>
       <div className="flex flex-col gap-6 mt-2">
         {stackData.map((group) => (
           <div

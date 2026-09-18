@@ -3,15 +3,19 @@ import { Bricolage_Grotesque, Oswald } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import GrainEffect from "@/components/visualEffects/GrainEffect";
 import Cursor from "@/components/cursor/Cursor";
+import Motion from "@/components/visualEffects/Motion";
+import Boot from "@/components/loading/Boot";
 
 // Fonts
 const MainFont = Bricolage_Grotesque({ subsets: ["latin"] });
 const OswaldFont = Oswald({ subsets: ["latin"], variable: "--font-oswald" });
 const PixelFont = localFont({
-  src: "../public/assets/fonts/BeautifulPoliceOfficer-rvv8x.ttf",
+  // woff2 rather than the raw TTF: next/font cannot subset a local file, so the
+  // whole face ships either way — 15KB compressed instead of 60KB.
+  src: "../public/assets/fonts/BeautifulPoliceOfficer-rvv8x.woff2",
   variable: "--font-pixel",
+  display: "swap",
 });
 
 const description =
@@ -60,9 +64,11 @@ export default function RootLayout({
           PixelFont.variable
         )}
       >
-        <GrainEffect />
-        <Cursor color="red" />
-        {children}
+        <Motion>
+          <Boot />
+          <Cursor color="red" />
+          {children}
+        </Motion>
       </body>
     </html>
   );

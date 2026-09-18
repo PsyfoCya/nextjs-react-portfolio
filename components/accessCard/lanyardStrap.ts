@@ -5,12 +5,12 @@ import * as THREE from "three";
  *
  * This replaces the `meshline` dependency the original PR used. MeshLine
  * extrudes its ribbon in *screen* space and corrects for the canvas aspect
- * ratio inside its vertex shader; in this badge's narrow gutter canvas
+ * ratio inside its vertex shader; in this card's narrow canvas
  * (320 x 684, aspect 0.47) that correction skewed the strap into a diagonal
  * slab that pointed nowhere near the card, even though the curve feeding it
  * was a clean vertical line.
  *
- * The badge is viewed essentially head-on, so the strap can simply be built in
+ * The card is viewed essentially head-on, so the strap can simply be built in
  * the XY plane: offset each point along the normal of its own tangent. No
  * shader maths, no aspect ratio, and one geometry allocated for the lifetime
  * of the component rather than one per frame.
@@ -31,7 +31,10 @@ export class LanyardStrap {
 
     const vertexCount = (segments + 1) * 2;
     this.positions = new Float32Array(vertexCount * 3);
-    this.samples = Array.from({ length: segments + 1 }, () => new THREE.Vector3());
+    this.samples = Array.from(
+      { length: segments + 1 },
+      () => new THREE.Vector3()
+    );
 
     // Two vertices per sample, stitched into a strip. The winding never
     // changes, so the index buffer is built once here.
@@ -50,13 +53,31 @@ export class LanyardStrap {
       uvs[i * 4 + 3] = v;
     }
 
+    // The ribbon is built in the XY plane and viewed head-on, so every vertex
+    // normal is +Z. Writing them once here means `update` does not have to call
+    // `computeVertexNormals()` — which walked all 66 vertices and every face,
+    // sixty times a second, to arrive at this same answer.
+    const normals = new Float32Array(vertexCount * 3);
+    for (let i = 0; i < vertexCount; i += 1) {
+      normals[i * 3 + 2] = 1;
+    }
+
     this.geometry = new THREE.BufferGeometry();
     this.geometry.setAttribute(
       "position",
       new THREE.BufferAttribute(this.positions, 3)
     );
+    this.geometry.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
     this.geometry.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
     this.geometry.setIndex(indices);
+
+    // Fixed and deliberately generous, covering anywhere the strap can swing.
+    // Recomputing it per frame only ever fed frustum culling for an object that
+    // is on screen whenever the card is.
+    this.geometry.boundingSphere = new THREE.Sphere(
+      new THREE.Vector3(0, 0, 0),
+      12
+    );
   }
 
   /** Rewrites the ribbon in place from the current curve. */
@@ -65,13 +86,19 @@ export class LanyardStrap {
     // allocate a fresh array of 33 Vector3s on every single frame.
     const points = this.samples;
     for (let i = 0; i <= this.segments; i += 1) {
-      curve.getPoint(i / this.segments, points[i]);
+      const target = points[i];
+      if (target) curve.getPoint(i / this.segments, target);
     }
 
     for (let i = 0; i <= this.segments; i += 1) {
       const point = points[i];
       const previous = points[Math.max(i - 1, 0)];
       const next = points[Math.min(i + 1, this.segments)];
+
+      // `samples` is allocated once with exactly segments + 1 entries and every
+      // index above is clamped into range, so these are always present. The
+      // check satisfies the type system; the branch is never taken.
+      if (!point || !previous || !next) continue;
 
       this.tangent.subVectors(next, previous);
       // A degenerate segment (two coincident samples) would normalise to NaN
@@ -94,9 +121,10 @@ export class LanyardStrap {
       this.positions[offset + 5] = point.z;
     }
 
-    this.geometry.attributes.position.needsUpdate = true;
-    this.geometry.computeVertexNormals();
-    this.geometry.computeBoundingSphere();
+    // Normals and bounds are fixed (see the constructor), so the only thing
+    // that changes per frame is the position buffer.
+    const position = this.geometry.attributes.position;
+    if (position) position.needsUpdate = true;
   }
 
   dispose(): void {

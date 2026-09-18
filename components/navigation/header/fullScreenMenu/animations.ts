@@ -7,18 +7,22 @@ export const menuSlide = {
   },
 };
 
+/**
+ * `index` is the `custom` prop framer-motion passes through — the link's
+ * position in the list, which staggers the entrance.
+ */
 export const slide = {
   initial: { x: 80 },
-  enter: (i: any) => ({
+  enter: (index: number) => ({
     x: 0,
-    transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.1 * i },
+    transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.1 * index },
   }),
-  exit: (i: any) => ({
+  exit: (index: number) => ({
     x: 80,
-    transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.1 * i },
+    transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.1 * index },
   }),
 };
- 
+
 export const scale = {
   open: { scale: 1, transition: { duration: 0.3 } },
   closed: { scale: 0, transition: { duration: 0.4 } },

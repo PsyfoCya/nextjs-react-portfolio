@@ -13,9 +13,7 @@ interface CaseStudyPageProps {
 export const generateStaticParams = () =>
   caseStudies.map((study) => ({ slug: study.slug }));
 
-export const generateMetadata = ({
-  params,
-}: CaseStudyPageProps): Metadata => {
+export const generateMetadata = ({ params }: CaseStudyPageProps): Metadata => {
   const study = getCaseStudy(params.slug);
 
   if (!study) {
@@ -35,8 +33,12 @@ const CaseStudyPage = ({ params }: CaseStudyPageProps) => {
     notFound();
   }
 
+  // `study` came out of `caseStudies`, so the index is always found — but if
+  // that ever stops being true, wrapping -1 lands on the last entry rather
+  // than reading past the end.
   const index = caseStudies.findIndex((item) => item.slug === study.slug);
-  const next = caseStudies[(index + 1) % caseStudies.length];
+  const next =
+    index === -1 ? undefined : caseStudies[(index + 1) % caseStudies.length];
 
   return (
     <PageShell backHref="/work" backLabel="All case studies">
@@ -140,23 +142,25 @@ const CaseStudyPage = ({ params }: CaseStudyPageProps) => {
           </section>
         </div>
 
-        <footer className="border-t border-border pt-8">
-          <Link
-            href={`/work/${next.slug}`}
-            className="link group flex flex-col gap-1"
-          >
-            <span className="font-pixel text-xs uppercase text-secondary-foreground">
-              Next case study
-            </span>
-            <span className="flex items-center gap-3 text-2xl font-medium text-primary-foreground">
-              {next.title}
-              <FiArrowRight
-                aria-hidden
-                className="text-xl transition-transform duration-200 group-hover:translate-x-1"
-              />
-            </span>
-          </Link>
-        </footer>
+        {next ? (
+          <footer className="border-t border-border pt-8">
+            <Link
+              href={`/work/${next.slug}`}
+              className="link group flex flex-col gap-1"
+            >
+              <span className="font-pixel text-xs uppercase text-secondary-foreground">
+                Next case study
+              </span>
+              <span className="flex items-center gap-3 text-2xl font-medium text-primary-foreground">
+                {next.title}
+                <FiArrowRight
+                  aria-hidden
+                  className="text-xl transition-transform duration-200 group-hover:translate-x-1"
+                />
+              </span>
+            </Link>
+          </footer>
+        ) : null}
       </article>
     </PageShell>
   );

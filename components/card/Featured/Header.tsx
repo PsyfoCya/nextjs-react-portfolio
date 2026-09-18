@@ -1,11 +1,9 @@
-import { FC } from "react";
-
 interface HeaderProps {
   title: string;
   tag: string;
 }
 
-const Header: FC<HeaderProps> = ({ title, tag }) => {
+const Header = ({ title, tag }: HeaderProps) => {
   return (
     <div className="bg-secondary-background flex flex-none flex-nowrap relative gap-3 px-4 sm:px-6 py-4 w-full items-center justify-between h-16 border border-border rounded-3xl">
       {/* Title */}

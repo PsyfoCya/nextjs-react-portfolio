@@ -7,14 +7,23 @@ export interface FeaturedProject {
   link?: string;
 }
 
-const featuredData: FeaturedProject[] = [
-  {
-    title: "Previous Portfolio Site",
-    tag: "Mar 2024",
-    video:
-      "https://cdn.dribbble.com/userupload/14984112/file/large-3660bda7ad875374cc33a794213fbbbe.mp4",
-    link: "https://siyabonga-hadebe.netlify.app",
-  },
+/**
+ * The project shown full-width above the row of smaller cards.
+ *
+ * Named rather than reached for as `featuredData[0]`, which the section did
+ * while the expandable row did `.slice(1)` — the split was real but implicit,
+ * and an empty array would have crashed the page.
+ */
+export const leadProject: FeaturedProject = {
+  title: "Previous Portfolio Site",
+  tag: "Mar 2024",
+  video:
+    "https://cdn.dribbble.com/userupload/14984112/file/large-3660bda7ad875374cc33a794213fbbbe.mp4",
+  link: "https://siyabonga-hadebe.netlify.app",
+};
+
+/** The rest, rendered as the expandable row. */
+export const supportingProjects: FeaturedProject[] = [
   {
     title: "Dronoticz",
     tag: "Jul 2023",
@@ -43,5 +52,7 @@ const featuredData: FeaturedProject[] = [
       "https://cdn.dribbble.com/userupload/15094726/file/original-cc9adea45b2f7bf19cfa697a0cde041b.mp4",
   },
 ];
+
+const featuredData: FeaturedProject[] = [leadProject, ...supportingProjects];
 
 export default featuredData;

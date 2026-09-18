@@ -3,24 +3,172 @@
 @tailwind utilities;
 
 :root {
-  --color-gradient: linear-gradient(0deg, #2a446f -10%, #0b1f41 50%, #2a446f 110%);
-  --color-gradient4: radial-gradient(circle, rgba(250, 172, 168, 0.5) 18%, rgba(116, 143, 252, 0.5) 38%, rgba(56, 217, 169, 0.5) 59%, rgba(206, 212, 218, 0.5) 81%, rgba(218, 119, 242, 0.5) 100%);
-  --color-gradient: linear-gradient(135deg,
-      #7179ef,
-      rgb(21, 59, 95) 34%,
-      #693d55 67%,
-      rgb(240, 128, 128));
+  /*
+    The site's signature gradient. It was written out by hand in four separate
+    places; everything that uses it now reads it from here.
+  */
+  --signature-1: #7179ef;
+  --signature-2: rgb(21, 59, 95);
+  --signature-3: #693d55;
+  --signature-4: rgb(240, 128, 128);
 
-  --color-gradient4: linear-gradient(circle,
-      rgba(82, 0, 78, 0.692) 25%,
-      rgb(21, 59, 95) 50%,
-      #693d55 75%,
-      rgb(240, 128, 128) 100%);
+  --signature-gradient: linear-gradient(
+    135deg,
+    var(--signature-1),
+    var(--signature-2) 34%,
+    var(--signature-3) 67%,
+    var(--signature-4)
+  );
+
+  /* The opaque fill a ringed card sits on, over the black page. */
+  --card-surface: #0d0d0d;
+}
+
+/*
+  Registered custom properties can be interpolated; plain ones cannot. The
+  angle sweeps the ring, and the dim fades it up on hover.
+*/
+@property --ring-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --ring-dim {
+  syntax: "<number>";
+  initial-value: 0.75;
+  inherits: false;
 }
 
 body {
   background-color: black;
   color: azure;
+}
+
+/*
+  Only hidden once the custom cursor has actually mounted. The class is added
+  by the component itself, so a coarse pointer, a failed hydration or JS being
+  off all leave the real cursor in place rather than a page you cannot see the
+  pointer on.
+*/
+.has-custom-cursor,
+.has-custom-cursor * {
+  cursor: none;
+}
+
+/*
+  The ring.
+
+  Two backgrounds on one element: an opaque fill clipped to the padding box,
+  and the signature gradient clipped to the border box. The 1px transparent
+  border is the only place the gradient shows through, so it reads as a
+  hairline ring around the card.
+
+  Idle cards hold the gradient dimmed, so the palette is present without
+  anything moving. It only sweeps while hovered or focused — one ring at a
+  time, rather than every card on the page turning at once.
+
+  The dimming is a black layer composited over the conic gradient inside the
+  border box, NOT a `filter` on the element — a filter would desaturate the
+  card's own text and images along with the ring.
+*/
+.gradient-ring {
+  border: 1px solid transparent;
+  background-image:
+    linear-gradient(var(--card-surface), var(--card-surface)),
+    linear-gradient(rgb(0 0 0 / var(--ring-dim)), rgb(0 0 0 / var(--ring-dim))),
+    conic-gradient(
+      from var(--ring-angle),
+      var(--signature-1),
+      var(--signature-2) 25%,
+      var(--signature-3) 50%,
+      var(--signature-4) 75%,
+      var(--signature-1)
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box, border-box;
+  transition:
+    --ring-dim 400ms ease,
+    box-shadow 400ms ease;
+}
+
+.gradient-ring:hover,
+.gradient-ring:focus-visible,
+.gradient-ring:focus-within {
+  --ring-dim: 0;
+  box-shadow: 0 10px 44px -18px rgb(113 121 239 / 0.45);
+  animation: ring-sweep 6s linear infinite;
+}
+
+/*
+  Only the innermost ring under the pointer lights up.
+
+  `:hover` and `:focus-within` both propagate to ancestors, so without this a
+  card inside a card ran two conic sweeps at once — one of them over a far
+  larger area than the thing actually being pointed at, and putting the caret
+  in a contact field set the whole section repainting for as long as you typed.
+  An outer ring holding a lit inner one stays quiet.
+*/
+.gradient-ring:has(.gradient-ring:hover),
+.gradient-ring:has(.gradient-ring:focus-within) {
+  --ring-dim: 0.75;
+  box-shadow: none;
+  animation: none;
+}
+
+/*
+  Form fields and other small surfaces. Same ring, lighter fill and a tighter
+  radius. The fill is a variable rather than a `bg-*` utility on purpose: the
+  ring is painted entirely through `background-image`, so any background
+  utility on the same element wipes it out.
+*/
+/* Cards that scroll internally get a hairline scrollbar, not the OS one. */
+.gradient-ring > div {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.16) transparent;
+}
+
+.gradient-ring--field {
+  --card-surface: #141414;
+  border-radius: 0.5rem;
+}
+
+@keyframes ring-sweep {
+  to {
+    --ring-angle: 360deg;
+  }
+}
+
+/*
+  Focus. Only the two form fields had a visible focus state before, so every
+  card, link and button fell back to the browser default outline — invisible
+  on black.
+*/
+:where(a, button, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--signature-1);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/*
+  One of roughly a dozen motion sources respected this before. Anything that
+  loops, sweeps or slides is answerable to it.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .gradient-ring:hover,
+  .gradient-ring:focus-visible,
+  .gradient-ring:focus-within {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @layer utilities {
@@ -33,42 +181,27 @@ body {
   }
 }
 
-
-
 /* Fancy Button */
 .fancy-btn {
-  /* background-image: linear-gradient(135deg, #00d372,
-      #56acff 34%,
-      #7179ef 67%,
-      #d87cac); */
-
-  background-image: linear-gradient(135deg,
-      #7179ef,
-      rgb(21, 59, 95) 34%,
-      #693d55 67%,
-      rgb(240, 128, 128));
-
+  background-image: var(--signature-gradient);
   border-radius: 100em;
   padding: 0.2vw;
   max-width: 100%;
-  display: inline-block
+  display: inline-block;
 }
 
 .fancy-bg {
-  background-image: linear-gradient(135deg,
-      #7179ef,
-      rgb(21, 59, 95) 34%,
-      #693d55 67%,
-      rgb(240, 128, 128));
-
+  background-image: var(--signature-gradient);
 }
 
 /* --Bottom Fade */
 
 .bottom_fade {
-  background-image: linear-gradient(0deg,
-      rgba(0, 0, 0, 0) 20.1275%,
-      rgba(255, 255, 255) 100%);
+  background-image: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 20.1275%,
+    rgba(255, 255, 255) 100%
+  );
 }
 
 /*---Svg curve---*/
