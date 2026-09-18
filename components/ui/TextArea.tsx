@@ -28,7 +28,7 @@ const TextArea: FC<TextAreaProps> = ({
         required={required}
         disabled={disabled}
         aria-label={placeholder}
-        className="bg-primary-background text-primary-foreground w-full rounded-lg text-sm ps-10 p-2.5 pt-9 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/40 disabled:opacity-60 cursor-none"
+        className="gradient-ring gradient-ring--field text-primary-foreground w-full text-sm ps-10 p-2.5 pt-9 focus:outline-none disabled:opacity-60 cursor-none"
       />
     </div>
   );

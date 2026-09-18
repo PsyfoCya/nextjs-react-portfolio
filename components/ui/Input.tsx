@@ -34,7 +34,7 @@ const Input: FC<InputProps> = ({
         disabled={disabled}
         autoComplete={autoComplete}
         aria-label={placeholder}
-        className="!bg-primary-background text-primary-foreground w-full rounded-lg text-sm ps-10 px-2.5 py-4 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/40 disabled:opacity-60"
+        className="gradient-ring gradient-ring--field text-primary-foreground w-full text-sm ps-10 px-2.5 py-4 focus:outline-none disabled:opacity-60"
       />
     </div>
   );

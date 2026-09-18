@@ -11,7 +11,9 @@ const Card: FC<CardProps> = ({ title, children, className }) => {
   return (
     <div
       className={cn(
-        "relative bg-primary-background w-full h-fit rounded-2xl border border-border p-6 text-primary-foreground overflow-hidden",
+        // `gradient-ring` replaces the border and the background: the ring is
+        // painted through `background-image`, so a `bg-*` utility would wipe it out.
+        "gradient-ring relative w-full h-fit rounded-2xl p-6 text-primary-foreground overflow-hidden",
         className
       )}
     >

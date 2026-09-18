@@ -23,6 +23,141 @@ body {
   color: azure;
 }
 
+/* ============================================================
+   Interactive hover states
+   ============================================================ */
+
+:root {
+  /*
+    The site's signature gradient — the one revealed under the "Contact Me"
+    button — as tokens, so the ring below can read it.
+  */
+  --signature-1: #7179ef;
+  --signature-2: rgb(21, 59, 95);
+  --signature-3: #693d55;
+  --signature-4: rgb(240, 128, 128);
+
+  /* The opaque fill a ringed surface sits on, over the black page. */
+  --card-surface: #0d0d0d;
+}
+
+/*
+  Registered custom properties can be interpolated; plain ones cannot. Without
+  this the ring would jump between keyframes instead of sweeping.
+*/
+@property --ring-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --ring-dim {
+  syntax: "<number>";
+  initial-value: 0.75;
+  inherits: false;
+}
+
+/*
+  The ring.
+
+  Three backgrounds on one element: an opaque fill clipped to the padding box,
+  a black dimmer, and the signature gradient as a conic sweep — the last two
+  clipped to the border box. The 1px transparent border is the only place the
+  gradient shows through, so it reads as a hairline ring around the card.
+
+  Idle surfaces hold the gradient dimmed, so the palette is present without
+  anything moving. It only sweeps while hovered or focused.
+
+  The dimming is a composited black layer rather than a `filter` on the
+  element: a filter would desaturate the card's own text and images along with
+  its ring.
+
+  Do not put a `bg-*` utility on a ringed element. The ring is painted entirely
+  through `background-image`, so a background utility wipes it out — set
+  `--card-surface` instead.
+*/
+.gradient-ring {
+  border: 1px solid transparent;
+  /*
+    Form controls carry a white background-color from the UA stylesheet, which
+    sits underneath the ring's layers. Harmless while every layer is opaque,
+    but it is not ours and it would show the moment one of them gained alpha.
+  */
+  background-color: transparent;
+  background-image:
+    linear-gradient(var(--card-surface), var(--card-surface)),
+    linear-gradient(rgb(0 0 0 / var(--ring-dim)), rgb(0 0 0 / var(--ring-dim))),
+    conic-gradient(
+      from var(--ring-angle),
+      var(--signature-1),
+      var(--signature-2) 25%,
+      var(--signature-3) 50%,
+      var(--signature-4) 75%,
+      var(--signature-1)
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box, border-box;
+  transition:
+    --ring-dim 400ms ease,
+    box-shadow 400ms ease;
+}
+
+.gradient-ring:hover,
+.gradient-ring:focus-visible,
+.gradient-ring:focus-within {
+  --ring-dim: 0;
+  box-shadow: 0 10px 44px -18px rgb(113 121 239 / 0.45);
+  animation: ring-sweep 6s linear infinite;
+}
+
+/*
+  Only the innermost ring under the pointer lights up.
+
+  `:hover` and `:focus-within` both propagate to ancestors, and several cards
+  here sit inside other cards — the About grid wraps MeCard, ResumeCard and
+  BackgroundCard in a Card when each already renders its own, and Contact does
+  the same to its ContactCards. Without this, hovering an inner card runs two
+  conic sweeps at once, one of them over a far larger area than the thing being
+  pointed at, and putting the caret in a contact field sets the whole section
+  repainting for as long as you type.
+*/
+.gradient-ring:has(.gradient-ring:hover),
+.gradient-ring:has(.gradient-ring:focus-within) {
+  --ring-dim: 0.75;
+  box-shadow: none;
+  animation: none;
+}
+
+/* Form fields: same ring, lighter fill, tighter radius. */
+.gradient-ring--field {
+  --card-surface: #141414;
+  border-radius: 0.5rem;
+}
+
+@keyframes ring-sweep {
+  to {
+    --ring-angle: 360deg;
+  }
+}
+
+/*
+  A visible focus state. Only the two form fields had one; every card, link and
+  button fell back to the browser default outline, which is invisible on black.
+*/
+:where(a, button, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--signature-1);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-ring:hover,
+  .gradient-ring:focus-visible,
+  .gradient-ring:focus-within {
+    animation: none;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
