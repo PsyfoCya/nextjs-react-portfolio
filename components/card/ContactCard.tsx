@@ -21,7 +21,7 @@ const ContactCard: FC<ContactCardProps> = ({
   const isExternal = href.startsWith("http");
 
   return (
-    <div className="bg-secondary-background border border-border rounded-lg relative overflow-hidden py-5 px-[25px] shadow-md">
+    <div className="gradient-ring relative rounded-lg overflow-hidden py-5 px-[25px] shadow-md">
       <div className="z-20 flex flex-col gap-8 justify-between items-start">
         {/* Header */}
         <div className="flex items-center gap-x-2">

@@ -86,7 +86,7 @@ const Work = () => {
       <div className="mt-10 flex justify-center">
         <Link
           href="/work"
-          className="link group flex items-center gap-3 rounded-full border border-border bg-primary-background px-6 py-3 text-primary-foreground transition-colors duration-200 hover:bg-white/[0.1]"
+          className="gradient-ring link group flex items-center gap-3 rounded-full px-6 py-3 text-primary-foreground"
         >
           <span className="font-medium">Read all case studies</span>
           <FiArrowRight

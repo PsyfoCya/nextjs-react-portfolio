@@ -128,7 +128,7 @@ const Contact = () => {
           <form
             ref={formRef}
             onSubmit={sendEmail}
-            className="lg:col-span-2 !bg-secondary-background border border-border rounded-lg space-y-6 relative overflow-hidden py-5 px-[25px] shadow-md"
+            className="gradient-ring lg:col-span-2 rounded-lg space-y-6 relative py-5 px-[25px] shadow-md"
           >
             <div className="flex flex-col lg:flex-row item-center justify-between mb-4 gap-8">
               <Input
